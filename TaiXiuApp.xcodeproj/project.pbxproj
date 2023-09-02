@@ -10,6 +10,10 @@
 		4105E0F92AA2204C00049009 /* SicboTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4105E0F82AA2204C00049009 /* SicboTableView.swift */; };
 		4105E0FB2AA2630900049009 /* MainMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4105E0FA2AA2630900049009 /* MainMenuView.swift */; };
 		4105E0FD2AA2829700049009 /* UserHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4105E0FC2AA2829700049009 /* UserHandler.swift */; };
+		4105E1002AA34BE200049009 /* RegisterLoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4105E0FE2AA349CA00049009 /* RegisterLoginView.swift */; };
+		4105E1022AA355E500049009 /* Player.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4105E1012AA355E500049009 /* Player.swift */; };
+		4105E1042AA362CF00049009 /* PlayerModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4105E1032AA362CF00049009 /* PlayerModel.swift */; };
+		4105E1062AA38C2E00049009 /* LeaderViewBoard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4105E1052AA38C2E00049009 /* LeaderViewBoard.swift */; };
 		4143557A2AA1F1D500992C51 /* PlaySound.swift in Sources */ = {isa = PBXBuildFile; fileRef = 414355792AA1F1D500992C51 /* PlaySound.swift */; };
 		414355842AA1F48C00992C51 /* ring-up.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 4143557C2AA1F48A00992C51 /* ring-up.mp3 */; };
 		414355852AA1F48C00992C51 /* winning.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 4143557D2AA1F48A00992C51 /* winning.mp3 */; };
@@ -33,6 +37,10 @@
 		4105E0F82AA2204C00049009 /* SicboTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SicboTableView.swift; sourceTree = "<group>"; };
 		4105E0FA2AA2630900049009 /* MainMenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMenuView.swift; sourceTree = "<group>"; };
 		4105E0FC2AA2829700049009 /* UserHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserHandler.swift; sourceTree = "<group>"; };
+		4105E0FE2AA349CA00049009 /* RegisterLoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterLoginView.swift; sourceTree = "<group>"; };
+		4105E1012AA355E500049009 /* Player.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Player.swift; sourceTree = "<group>"; };
+		4105E1032AA362CF00049009 /* PlayerModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerModel.swift; sourceTree = "<group>"; };
+		4105E1052AA38C2E00049009 /* LeaderViewBoard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeaderViewBoard.swift; sourceTree = "<group>"; };
 		414355792AA1F1D500992C51 /* PlaySound.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaySound.swift; sourceTree = "<group>"; };
 		4143557C2AA1F48A00992C51 /* ring-up.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "ring-up.mp3"; sourceTree = "<group>"; };
 		4143557D2AA1F48A00992C51 /* winning.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = winning.mp3; sourceTree = "<group>"; };
@@ -88,6 +96,8 @@
 				4143558C2AA1FC1E00992C51 /* InfoView.swift */,
 				4105E0F82AA2204C00049009 /* SicboTableView.swift */,
 				4105E0FA2AA2630900049009 /* MainMenuView.swift */,
+				4105E0FE2AA349CA00049009 /* RegisterLoginView.swift */,
+				4105E1052AA38C2E00049009 /* LeaderViewBoard.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -95,6 +105,8 @@
 		416B6D6B2AA198250084101D /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
+				4105E1012AA355E500049009 /* Player.swift */,
+				4105E1032AA362CF00049009 /* PlayerModel.swift */,
 				416B6D6F2AA1A3D90084101D /* Modifiers.swift */,
 				414355792AA1F1D500992C51 /* PlaySound.swift */,
 				4105E0FC2AA2829700049009 /* UserHandler.swift */,
@@ -219,6 +231,8 @@
 			files = (
 				416B6D702AA1A3D90084101D /* Modifiers.swift in Sources */,
 				4143557A2AA1F1D500992C51 /* PlaySound.swift in Sources */,
+				4105E1022AA355E500049009 /* Player.swift in Sources */,
+				4105E1042AA362CF00049009 /* PlayerModel.swift in Sources */,
 				4105E0F92AA2204C00049009 /* SicboTableView.swift in Sources */,
 				4105E0FB2AA2630900049009 /* MainMenuView.swift in Sources */,
 				41B8A8712A9F9F610068EF04 /* ContentView.swift in Sources */,
@@ -226,6 +240,8 @@
 				416B6D6E2AA1A13C0084101D /* LogoView.swift in Sources */,
 				4105E0FD2AA2829700049009 /* UserHandler.swift in Sources */,
 				41B8A86F2A9F9F610068EF04 /* TaiXiuAppApp.swift in Sources */,
+				4105E1002AA34BE200049009 /* RegisterLoginView.swift in Sources */,
+				4105E1062AA38C2E00049009 /* LeaderViewBoard.swift in Sources */,
 				4143558D2AA1FC1E00992C51 /* InfoView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

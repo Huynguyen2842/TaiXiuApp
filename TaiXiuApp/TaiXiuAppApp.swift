@@ -11,7 +11,7 @@ import SwiftUI
 struct TaiXiuAppApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            RegisterLoginView()
         }
     }
 }

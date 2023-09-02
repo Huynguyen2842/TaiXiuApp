@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct ContentView: View {
+    @AppStorage("players") private var playerData: Data = Data()
+    @StateObject private var players:PlayerModel = PlayerModel()
     // MARK: - PROPERTIES
     let icons = ["dice1","dice2","dice3","dice4","dice5","dice6"]
 //    let icons = ["apple","bar","bell"]
@@ -16,16 +18,19 @@ struct ContentView: View {
     @State var reels = [0,1,2]
     @State var coins = 100
     @State var betAmount = 10
-    @AppStorage ("highscore") var highscore = 0
+    @State var highscore = 0
     @State var isChooseBet10 = true
     @State var isChooseBet20 = false
     @State var animationIcon = true
     @State var showGameOverMessage = false
     @State var showInfoView = false
+    @State var showLeaderBoard = false
     @State var NumReel0 = 0
     @State var NumReel1 = 0
     @State var NumReel2 = 0
     @State var sum3Reel = 0
+    
+    @Binding var currentPlayerIndex: Int
     // MARK: - LOGIC SPIN REELS
     func spinReels(){
 //        reels[0] = Int.random(in: 0...icons.count-1)
@@ -516,10 +521,12 @@ struct ContentView: View {
     // MARK: - PLAYER WINING LOGIC
     func PlayerWins(){
         coins += betAmount*10
+        players.players[currentPlayerIndex].UserMoney = coins
     }
     // MARK: - HIGHSCCORE LOGIC
     func newHighScore(){
         highscore = coins
+        players.players[currentPlayerIndex].HighScore = highscore
         playSound(sound: "highscore", type: "mp3")
     }
     // MARK: - PLAYER LOSING LOGIC
@@ -600,6 +607,17 @@ struct ContentView: View {
                     .modifier(ScoreCapsuleStyle())
                     
                     Spacer()
+                    Button {
+                        showLeaderBoard = true
+                    } label: {
+                        Image(systemName: "trophy.fill")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 31, height: 31)
+                            .foregroundColor(.yellow)
+                    }
+
+                    Spacer()
                     
                     HStack{
                         Text("High\nScore".uppercased())
@@ -657,8 +675,10 @@ struct ContentView: View {
                             CheckWinning()
                             print(coins)
                             print(sum3Reel)
+                            players.players[currentPlayerIndex].HighScore = highscore
+                            players.players[currentPlayerIndex].UserMoney = coins
                             isGameOver()
-                            
+                            savePlayers()
                         } label: {
                             Image("Goldspin")
                                 .resizable()
@@ -687,7 +707,6 @@ struct ContentView: View {
             }
             //VStack
             .offset(y: 10)
-            
             if showGameOverMessage {
                 ZStack{
                     Color("RmitBlue")
@@ -733,12 +752,49 @@ struct ContentView: View {
         .sheet(isPresented: $showInfoView){
             InfoView()
         }
+        
+        .sheet(isPresented: $showLeaderBoard){
+           LeaderViewBoard()
+        }
+        .onAppear{
+            loadPlayers()
+            if currentPlayerIndex != -1 {
+                if players.players[currentPlayerIndex].HighScore == 0 {
+                    players.players[currentPlayerIndex].UserMoney = 100
+                    coins = players.players[currentPlayerIndex].UserMoney
+                }
+                else {
+                    coins = players.players[currentPlayerIndex].UserMoney
+                }
+          
+                highscore = players.players[currentPlayerIndex].HighScore
+            }
+        }
     }
+    
+    func savePlayers() {
+        do{
+            let encodedPlayers = try JSONEncoder().encode(players.players)
+            playerData = encodedPlayers
+        } catch {
+            print("Error Saving players: ")
+        }
+    }
+    
+    func loadPlayers() {
+        do{
+            let decodedPlayers = try JSONDecoder().decode([Player].self, from: playerData)
+            players.players = decodedPlayers
+        } catch {
+            print("Error Loading Players")
+        }
+    }
+    
 }
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView()
+        ContentView(currentPlayerIndex: .constant(-1))
     }
 }
 
