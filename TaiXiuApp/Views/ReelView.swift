@@ -12,7 +12,7 @@ struct ReelView: View {
     var AnimatingIcon: Bool
     var body: some View {
         ZStack{
-            Image("reel")
+            Image("Goldreel")
                 .resizable()
                 .modifier(ReelImageModifier())
                 .frame(width: 80, height: 80)

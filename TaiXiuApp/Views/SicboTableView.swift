@@ -8,12 +8,11 @@
 import SwiftUI
 
 struct SicboTableView: View {
-    @EnvironmentObject var userHandler: UserHandler
+    @ObservedObject var userHandler: UserHandler
     var body: some View {
         ZStack{
             VStack{
                 HStack{
-        
                     Button {
                         userHandler.chooseBetSmall()
                     } label: {
@@ -41,25 +40,32 @@ struct SicboTableView: View {
                             )
                     }
 
-
-                    
-                    Rectangle()
-                        .fill(Color("DarkGreen"))
-                        .frame(width: 57, height: 50, alignment: .center)
-                        .cornerRadius(10)
-                        .overlay(
-                            VStack{
-                                Text("Big").foregroundColor(.white)
-                                .font(.system(size: 20))
-                                .bold()
-                                .modifier(ScoreLabelModifiers())
-                                Text("11-17").foregroundColor(.white)
-                                .font(.system(size: 15))
-                                .bold()
-                                .modifier(ScoreNumberModifiers())
-                                
-                            }
-                        )
+                    Button {
+                        userHandler.chooseBetBig()
+                    } label: {
+                        Rectangle()
+                            .fill(Color("DarkGreen"))
+                            .frame(width: 57, height: 50, alignment: .center)
+                            .cornerRadius(10)
+                            .overlay(
+                                ZStack {
+                                    VStack{
+                                        Text("Big").foregroundColor(.white)
+                                        .font(.system(size: 20))
+                                        .bold()
+                                        .modifier(ScoreLabelModifiers())
+                                        Text("11-17").foregroundColor(.white)
+                                        .font(.system(size: 15))
+                                        .bold()
+                                        .modifier(ScoreNumberModifiers())
+                                    }
+                                    Image("YellowChips")
+                                        .resizable()
+                                        .opacity(userHandler.isChooseBetBig ? 1 : 0 )
+                                        .modifier(CasinoChipModifier())
+                                }
+                            )
+                    }
                     Rectangle()
                         .fill(Color("DarkGreen"))
                         .frame(width: 120, height: 50, alignment: .center)
@@ -467,7 +473,6 @@ struct SicboTableView: View {
 
 struct SicboTableView_Previews: PreviewProvider {
     static var previews: some View {
-        SicboTableView()
-            .environmentObject(UserHandler())
+        SicboTableView(userHandler: UserHandler())
     }
 }

@@ -11,7 +11,8 @@ struct ContentView: View {
     // MARK: - PROPERTIES
     let icons = ["dice1","dice2","dice3","dice4","dice5","dice6"]
 //    let icons = ["apple","bar","bell"]
-    @EnvironmentObject var userHandler: UserHandler
+    @EnvironmentObject var userProgress: UserHandler
+    @StateObject var userHandler = UserHandler()
     @State var reels = [0,1,2]
     @State var coins = 100
     @State var betAmount = 10
@@ -45,19 +46,46 @@ struct ContentView: View {
         
         sum3Reel = NumReel0 + NumReel1 + NumReel2
         
-        if reels[0] == reels[1] && reels[1] == reels[2] && reels[2] == reels[0] {
-            //WINING LOGIC
-            PlayerWins()
-            if coins > highscore {
-                newHighScore()
+//        if reels[0] == reels[1] && reels[1] == reels[2] && reels[2] == reels[0] {
+//            //WINING LOGIC
+//            PlayerWins()
+//            if coins > highscore {
+//                newHighScore()
+//            } else {
+//                playSound(sound: "winning", type: "mp3")
+//            }
+//        } else {
+//            //LOSING LOGIC
+//            PlayerLoses()
+//        }
+        
+        if (userHandler.isChooseBetSmall == true) {
+            if (sum3Reel >= 4 && sum3Reel <= 10){
+                PlayerWins()
+                if coins > highscore {
+                    newHighScore()
+                } else {
+                    playSound(sound: "winning", type: "mp3")
+                }
             } else {
-                playSound(sound: "winning", type: "mp3")
+                PlayerLoses()
             }
-        } else {
-            //LOSING LOGIC
-            PlayerLoses()
+        }
+        
+        if (userHandler.isChooseBetBig == true) {
+            if (sum3Reel >= 11 && sum3Reel <= 17){
+                PlayerWins()
+                if coins > highscore {
+                    newHighScore()
+                } else {
+                    playSound(sound: "winning", type: "mp3")
+                }
+            } else {
+                PlayerLoses()
+            }
         }
     }
+    
     // MARK: - PLAYER WINING LOGIC
     func PlayerWins(){
         coins += betAmount*10
@@ -65,7 +93,7 @@ struct ContentView: View {
     // MARK: - HIGHSCCORE LOGIC
     func newHighScore(){
         highscore = coins
-        UserDefaults.standard.set(highscore, forKey: "highscore")
+        playSound(sound: "highscore", type: "mp3")
     }
     // MARK: - PLAYER LOSING LOGIC
     func PlayerLoses(){
@@ -92,7 +120,13 @@ struct ContentView: View {
             playSound(sound: "gameover", type: "mp3")
         }
     }
-    // MARK: - RESET GAME LOGIC 
+    // MARK: - RESET GAME LOGIC
+    func resetGame(){
+        highscore = 0
+        coins = 100
+        ChooseBet10()
+        playSound(sound: "ring-up", type: "mp3")
+    }
     
     var body: some View {
         ZStack{
@@ -106,7 +140,7 @@ struct ContentView: View {
             VStack{
                 HStack{
                     Button {
-                        showInfoView = true
+                        self.resetGame()
                     } label: {
                         Image(systemName: "arrow.2.circlepath.circle")
                             .font(.title2)
@@ -163,7 +197,7 @@ struct ContentView: View {
                         ReelView(reelIcon: icons[reels[2]], AnimatingIcon: animationIcon)
                     }
                     
-                    SicboTableView()
+                    SicboTableView(userHandler: userHandler)
                     
                     Spacer()
                     
@@ -175,7 +209,7 @@ struct ContentView: View {
                             HStack{
                                 Text("20")
                                     .modifier(BetCapsuleModifier())
-                                Image("casino-chips")
+                                Image("YellowChips")
                                     .resizable()
                                     .opacity(isChooseBet20 ? 1: 0)
                                     .modifier(CasinoChipModifier())
@@ -199,7 +233,7 @@ struct ContentView: View {
                             isGameOver()
                             
                         } label: {
-                            Image("spin")
+                            Image("Goldspin")
                                 .resizable()
                                 .frame(width: 80, height: 80)
                                 .modifier(ReelImageModifier())
@@ -211,7 +245,7 @@ struct ContentView: View {
                             ChooseBet10()
                         } label: {
                             HStack{
-                                Image("casino-chips")
+                                Image("YellowChips")
                                     .resizable()
                                     .modifier(CasinoChipModifier())
                                     .opacity(isChooseBet10 ? 1: 0)
@@ -278,7 +312,6 @@ struct ContentView: View {
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView()
-            .environmentObject(UserHandler())
     }
 }
 

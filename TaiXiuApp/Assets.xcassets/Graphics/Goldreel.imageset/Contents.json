@@ -1,17 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "casino-chip.png",
+      "filename" : "gfx-reel.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "casino-chip@2x.png",
+      "filename" : "gfx-reel@2x.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "casino-chip@3x.png",
+      "filename" : "gfx-reel@3x.png",
       "idiom" : "universal",
       "scale" : "3x"
     }
