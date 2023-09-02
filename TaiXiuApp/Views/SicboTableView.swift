@@ -34,7 +34,7 @@ struct SicboTableView: View {
                                     }
                                     Image("YellowChips")
                                         .resizable()
-                                        .opacity(userHandler.isChooseBetSmall ? 1 : 0 )
+                                        .opacity(userHandler.isBetSmall ? 1 : 0 )
                                         .modifier(CasinoChipModifier())
                                 }
                             )
@@ -61,405 +61,753 @@ struct SicboTableView: View {
                                     }
                                     Image("YellowChips")
                                         .resizable()
-                                        .opacity(userHandler.isChooseBetBig ? 1 : 0 )
+                                        .opacity(userHandler.isBetBig ? 1 : 0 )
                                         .modifier(CasinoChipModifier())
                                 }
                             )
                     }
-                    Rectangle()
-                        .fill(Color("DarkGreen"))
-                        .frame(width: 120, height: 50, alignment: .center)
-                        .cornerRadius(10)
-                        .overlay(
-                            VStack{
-                                Text("Any Triple").foregroundColor(.white)
-                                .font(.system(size: 20))
-                                .bold()
-                                .modifier(ScoreLabelModifiers())
-                            }
-                        )
-                    Rectangle()
-                        .fill(Color("DarkGreen"))
-                        .frame(width: 57, height: 50, alignment: .center)
-                        .cornerRadius(10)
-                        .overlay(
-                            VStack{
-                                Text("ODD").foregroundColor(.white)
-                                .font(.system(size: 20))
-                                .bold()
-                                .modifier(ScoreLabelModifiers())
-                            }
-                        )
-                    Rectangle()
-                        .fill(Color("DarkGreen"))
-                        .frame(width: 57, height: 50, alignment: .center)
-                        .cornerRadius(10)
-                        .overlay(
-                            VStack{
-                                Text("EVEN").foregroundColor(.white)
-                                .font(.system(size: 20))
-                                .bold()
-                                .modifier(ScoreLabelModifiers())
-                            }
-                        )
+                    
+                    Button {
+                        userHandler.chooseBetAnyTriple()
+                    } label: {
+                        Rectangle()
+                            .fill(Color("DarkGreen"))
+                            .frame(width: 120, height: 50, alignment: .center)
+                            .cornerRadius(10)
+                            .overlay(
+                                ZStack {
+                                    VStack{
+                                        Text("Any Triple").foregroundColor(.white)
+                                        .font(.system(size: 20))
+                                        .bold()
+                                        .modifier(ScoreLabelModifiers())
+                                    }
+                                    Image("YellowChips")
+                                        .resizable()
+                                        .opacity(userHandler.isBetAnyTriple ? 1 : 0 )
+                                        .modifier(CasinoChipModifier())
+                                }
+                            )
+                    }
+                    
+                    Button {
+                        userHandler.chooseBetOdd()
+                    } label: {
+                        Rectangle()
+                            .fill(Color("DarkGreen"))
+                            .frame(width: 57, height: 50, alignment: .center)
+                            .cornerRadius(10)
+                            .overlay(
+                                ZStack {
+                                    VStack{
+                                        Text("ODD").foregroundColor(.white)
+                                        .font(.system(size: 20))
+                                        .bold()
+                                        .modifier(ScoreLabelModifiers())
+                                    }
+                                    Image("YellowChips")
+                                        .resizable()
+                                        .opacity(userHandler.isBetOdd ? 1 : 0 )
+                                        .modifier(CasinoChipModifier())
+                                }
+                            )
+                    }
+                    
+                    Button {
+                        userHandler.chooseBetEven()
+                    } label: {
+                        Rectangle()
+                            .fill(Color("DarkGreen"))
+                            .frame(width: 57, height: 50, alignment: .center)
+                            .cornerRadius(10)
+                            .overlay(
+                                ZStack {
+                                    VStack{
+                                        Text("EVEN").foregroundColor(.white)
+                                        .font(.system(size: 20))
+                                        .bold()
+                                        .modifier(ScoreLabelModifiers())
+                                    }
+                                    Image("YellowChips")
+                                        .resizable()
+                                        .opacity(userHandler.isBetEven ? 1 : 0 )
+                                        .modifier(CasinoChipModifier())
+                                }
+                            )
+                    }
                 }
                 HStack {
-                    Rectangle()
-                        .fill(Color("DarkGreen"))
-                        .frame(width: 57, height: 50, alignment: .center)
-                        .cornerRadius(10)
-                        .overlay {
-                            Image("red_dice1")
-                                .resizable()
-                                .frame(width:40, height: 40, alignment: .center)
-                        }
-                    Rectangle()
-                        .fill(Color("DarkGreen"))
-                        .frame(width: 57, height: 50, alignment: .center)
-                        .cornerRadius(10)
-                        .overlay {
-                            Image("red_dice2")
-                                .resizable()
-                                .frame(width:40, height: 40, alignment: .center)
-                        }
-                    Rectangle()
-                        .fill(Color("DarkGreen"))
-                        .frame(width: 57, height: 50, alignment: .center)
-                        .cornerRadius(10)
-                        .overlay {
-                            Image("red_dice3")
-                                .resizable()
-                                .frame(width:40, height: 40, alignment: .center)
-                        }
-                    Rectangle()
-                        .fill(Color("DarkGreen"))
-                        .frame(width: 57, height: 50, alignment: .center)
-                        .cornerRadius(10)
-                        .overlay {
-                            Image("red_dice4")
-                                .resizable()
-                                .frame(width:40, height: 40, alignment: .center)
-                        }
-                    Rectangle()
-                        .fill(Color("DarkGreen"))
-                        .frame(width: 57, height: 50, alignment: .center)
-                        .cornerRadius(10)
-                        .overlay {
-                            Image("red_dice5")
-                                .resizable()
-                                .frame(width:40, height: 40, alignment: .center)
-                        }
-                    Rectangle()
-                        .fill(Color("DarkGreen"))
-                        .frame(width: 57, height: 50, alignment: .center)
-                        .cornerRadius(10)
-                        .overlay {
-                            Image("red_dice6")
-                                .resizable()
-                                .frame(width:40, height: 40, alignment: .center)
-                        }
+//                    Rectangle()
+//                        .fill(Color("DarkGreen"))
+//                        .frame(width: 57, height: 50, alignment: .center)
+//                        .cornerRadius(10)
+//                        .overlay {
+//                            Image("red_dice1")
+//                                .resizable()
+//                                .frame(width:40, height: 40, alignment: .center)
+//                        }
+                    
+                    Button {
+                        userHandler.chooseBetOne()
+                    } label: {
+                        Rectangle()
+                            .fill(Color("DarkGreen"))
+                            .frame(width: 57, height: 50, alignment: .center)
+                            .cornerRadius(10)
+                            .overlay {
+                                ZStack {
+                                    VStack{
+                                        Image("red_dice1")
+                                            .resizable()
+                                            .frame(width:40, height: 40, alignment: .center)
+                                    }
+                                    Image("YellowChips")
+                                        .resizable()
+                                        .opacity(userHandler.isBetOne ? 1 : 0 )
+                                        .modifier(CasinoChipModifier())
+                                }
+                            }
+                    }
+                    
+                    Button {
+                        userHandler.chooseBetTwo()
+                    } label: {
+                        Rectangle()
+                            .fill(Color("DarkGreen"))
+                            .frame(width: 57, height: 50, alignment: .center)
+                            .cornerRadius(10)
+                            .overlay {
+                                ZStack {
+                                    VStack{
+                                        Image("red_dice2")
+                                            .resizable()
+                                            .frame(width:40, height: 40, alignment: .center)
+                                    }
+                                    Image("YellowChips")
+                                        .resizable()
+                                        .opacity(userHandler.isBetTwo ? 1 : 0 )
+                                        .modifier(CasinoChipModifier())
+                                }
+                            }
+                    }
+                    
+                    Button {
+                        userHandler.chooseBetThree()
+                    } label: {
+                        Rectangle()
+                            .fill(Color("DarkGreen"))
+                            .frame(width: 57, height: 50, alignment: .center)
+                            .cornerRadius(10)
+                            .overlay {
+                                ZStack {
+                                    VStack{
+                                        Image("red_dice3")
+                                            .resizable()
+                                            .frame(width:40, height: 40, alignment: .center)
+                                    }
+                                    Image("YellowChips")
+                                        .resizable()
+                                        .opacity(userHandler.isBetThree ? 1 : 0 )
+                                        .modifier(CasinoChipModifier())
+                                }
+                            }
+                    }
+                    
+                    Button {
+                        userHandler.chooseBetFour()
+                    } label: {
+                        Rectangle()
+                            .fill(Color("DarkGreen"))
+                            .frame(width: 57, height: 50, alignment: .center)
+                            .cornerRadius(10)
+                            .overlay {
+                                ZStack {
+                                    VStack{
+                                        Image("red_dice4")
+                                            .resizable()
+                                            .frame(width:40, height: 40, alignment: .center)
+                                    }
+                                    Image("YellowChips")
+                                        .resizable()
+                                        .opacity(userHandler.isBetFour ? 1 : 0 )
+                                        .modifier(CasinoChipModifier())
+                                }
+                            }
+                    }
+                    
+                    Button {
+                        userHandler.chooseBetFive()
+                    } label: {
+                        Rectangle()
+                            .fill(Color("DarkGreen"))
+                            .frame(width: 57, height: 50, alignment: .center)
+                            .cornerRadius(10)
+                            .overlay {
+                                ZStack {
+                                    VStack{
+                                        Image("red_dice5")
+                                            .resizable()
+                                            .frame(width:40, height: 40, alignment: .center)
+                                    }
+                                    Image("YellowChips")
+                                        .resizable()
+                                        .opacity(userHandler.isBetFive ? 1 : 0 )
+                                        .modifier(CasinoChipModifier())
+                                }
+                            }
+                    }
+                    
+                    Button {
+                        userHandler.chooseBetSix()
+                    } label: {
+                        Rectangle()
+                            .fill(Color("DarkGreen"))
+                            .frame(width: 57, height: 50, alignment: .center)
+                            .cornerRadius(10)
+                            .overlay {
+                                ZStack {
+                                    VStack{
+                                        Image("red_dice6")
+                                            .resizable()
+                                            .frame(width:40, height: 40, alignment: .center)
+                                    }
+                                    Image("YellowChips")
+                                        .resizable()
+                                        .opacity(userHandler.isBetSix ? 1 : 0 )
+                                        .modifier(CasinoChipModifier())
+                                }
+                                
+                                
+                            }
+                    }
                 }
                 HStack {
-                    Rectangle()
-                        .fill(Color("DarkGreen"))
-                        .frame(width: 57, height: 100, alignment: .center)
-                        .cornerRadius(10)
-                        .overlay {
-                            VStack{
-                                Image("red_dice1")
-                                    .resizable()
-                                    .frame(width:40, height: 40, alignment: .center)
-                                Image("red_dice1")
-                                    .resizable()
-                                    .frame(width:40, height: 40, alignment: .center)
+                    Button {
+                        userHandler.chooseBetDoubleOne()
+                    } label: {
+                        Rectangle()
+                            .fill(Color("DarkGreen"))
+                            .frame(width: 57, height: 100, alignment: .center)
+                            .cornerRadius(10)
+                            .overlay {
+                                ZStack {
+                                    VStack{
+                                        Image("red_dice1")
+                                            .resizable()
+                                            .frame(width:40, height: 40, alignment: .center)
+                                        Image("red_dice1")
+                                            .resizable()
+                                            .frame(width:40, height: 40, alignment: .center)
+                                    }
+                                    Image("YellowChips")
+                                        .resizable()
+                                        .opacity(userHandler.isBetDoubleOne ? 1 : 0 )
+                                        .modifier(CasinoChipModifier())
+                                }
                             }
-                        }
-                    Rectangle()
-                        .fill(Color("DarkGreen"))
-                        .frame(width: 57, height: 100, alignment: .center)
-                        .cornerRadius(10)
-                        .overlay {
-                            VStack{
-                                Image("red_dice2")
-                                    .resizable()
-                                    .frame(width:40, height: 40, alignment: .center)
-                                Image("red_dice2")
-                                    .resizable()
-                                    .frame(width:40, height: 40, alignment: .center)
+                    }
+                    
+                    Button {
+                        userHandler.chooseBetDoubleTwo()
+                    } label: {
+                        Rectangle()
+                            .fill(Color("DarkGreen"))
+                            .frame(width: 57, height: 100, alignment: .center)
+                            .cornerRadius(10)
+                            .overlay {
+                                ZStack {
+                                    VStack{
+                                        Image("red_dice2")
+                                            .resizable()
+                                            .frame(width:40, height: 40, alignment: .center)
+                                        Image("red_dice2")
+                                            .resizable()
+                                            .frame(width:40, height: 40, alignment: .center)
+                                    }
+                                    Image("YellowChips")
+                                        .resizable()
+                                        .opacity(userHandler.isBetDoubleTwo ? 1 : 0 )
+                                        .modifier(CasinoChipModifier())
+                                }
                             }
-                        }
-                    Rectangle()
-                        .fill(Color("DarkGreen"))
-                        .frame(width: 57, height: 100, alignment: .center)
-                        .cornerRadius(10)
-                        .overlay {
-                            VStack{
-                                Image("red_dice3")
-                                    .resizable()
-                                    .frame(width:40, height: 40, alignment: .center)
-                                Image("red_dice3")
-                                    .resizable()
-                                    .frame(width:40, height: 40, alignment: .center)
+                    }
+                    
+                    Button {
+                        userHandler.chooseBetDoubleThree()
+                    } label: {
+                        Rectangle()
+                            .fill(Color("DarkGreen"))
+                            .frame(width: 57, height: 100, alignment: .center)
+                            .cornerRadius(10)
+                            .overlay {
+                                ZStack {
+                                    VStack{
+                                        Image("red_dice3")
+                                            .resizable()
+                                            .frame(width:40, height: 40, alignment: .center)
+                                        Image("red_dice3")
+                                            .resizable()
+                                            .frame(width:40, height: 40, alignment: .center)
+                                    }
+                                    Image("YellowChips")
+                                        .resizable()
+                                        .opacity(userHandler.isBetDoubleThree ? 1 : 0 )
+                                        .modifier(CasinoChipModifier())
+                                }
                             }
-                        }
-                    Rectangle()
-                        .fill(Color("DarkGreen"))
-                        .frame(width: 57, height: 100, alignment: .center)
-                        .cornerRadius(10)
-                        .overlay {
-                            VStack{
-                                Image("red_dice4")
-                                    .resizable()
-                                    .frame(width:40, height: 40, alignment: .center)
-                                Image("red_dice4")
-                                    .resizable()
-                                    .frame(width:40, height: 40, alignment: .center)
+                    }
+                    
+                    Button {
+                        userHandler.chooseBetDoubleFour()
+                    } label: {
+                        Rectangle()
+                            .fill(Color("DarkGreen"))
+                            .frame(width: 57, height: 100, alignment: .center)
+                            .cornerRadius(10)
+                            .overlay {
+                                ZStack {
+                                    VStack{
+                                        Image("red_dice4")
+                                            .resizable()
+                                            .frame(width:40, height: 40, alignment: .center)
+                                        Image("red_dice4")
+                                            .resizable()
+                                            .frame(width:40, height: 40, alignment: .center)
+                                    }
+                                    Image("YellowChips")
+                                        .resizable()
+                                        .opacity(userHandler.isBetDoubleFour ? 1 : 0 )
+                                        .modifier(CasinoChipModifier())
+                                }
                             }
-                        }
-                    Rectangle()
-                        .fill(Color("DarkGreen"))
-                        .frame(width: 57, height: 100, alignment: .center)
-                        .cornerRadius(10)
-                        .overlay {
-                            VStack{
-                                Image("red_dice5")
-                                    .resizable()
-                                    .frame(width:40, height: 40, alignment: .center)
-                                Image("red_dice5")
-                                    .resizable()
-                                    .frame(width:40, height: 40, alignment: .center)
+                    }
+                    
+                    Button {
+                        userHandler.chooseBetDoubleFive()
+                    } label: {
+                        Rectangle()
+                            .fill(Color("DarkGreen"))
+                            .frame(width: 57, height: 100, alignment: .center)
+                            .cornerRadius(10)
+                            .overlay {
+                                ZStack {
+                                    VStack{
+                                        Image("red_dice5")
+                                            .resizable()
+                                            .frame(width:40, height: 40, alignment: .center)
+                                        Image("red_dice5")
+                                            .resizable()
+                                            .frame(width:40, height: 40, alignment: .center)
+                                    }
+                                    Image("YellowChips")
+                                        .resizable()
+                                        .opacity(userHandler.isBetDoubleFive ? 1 : 0 )
+                                        .modifier(CasinoChipModifier())
+                                }
                             }
-                        }
-                    Rectangle()
-                        .fill(Color("DarkGreen"))
-                        .frame(width: 57, height: 100, alignment: .center)
-                        .cornerRadius(10)
-                        .overlay {
-                            VStack{
-                                Image("red_dice6")
-                                    .resizable()
-                                    .frame(width:40, height: 40, alignment: .center)
-                                Image("red_dice6")
-                                    .resizable()
-                                    .frame(width:40, height: 40, alignment: .center)
+                    }
+                    
+                    Button {
+                        userHandler.chooseBetDoubleSix()
+                    } label: {
+                        Rectangle()
+                            .fill(Color("DarkGreen"))
+                            .frame(width: 57, height: 100, alignment: .center)
+                            .cornerRadius(10)
+                            .overlay {
+                                ZStack {
+                                    VStack{
+                                        Image("red_dice6")
+                                            .resizable()
+                                            .frame(width:40, height: 40, alignment: .center)
+                                        Image("red_dice6")
+                                            .resizable()
+                                            .frame(width:40, height: 40, alignment: .center)
+                                    }
+                                    Image("YellowChips")
+                                        .resizable()
+                                        .opacity(userHandler.isBetDoubleSix ? 1 : 0 )
+                                        .modifier(CasinoChipModifier())
+                                }
                             }
-                        }
+                    }
                 }
                 HStack {
-                    Rectangle()
-                        .fill(Color("DarkGreen"))
-                        .frame(width: 57, height: 100, alignment: .center)
-                        .cornerRadius(10)
-                        .overlay {
-                            VStack{
-                                Image("red_dice1")
-                                    .resizable()
-                                    .frame(width:40, height: 40, alignment: .center)
-                                Image("red_dice2")
-                                    .resizable()
-                                    .frame(width:40, height: 40, alignment: .center)
+                    Button {
+                        userHandler.chooseBetOneTwo()
+                    } label: {
+                        Rectangle()
+                            .fill(Color("DarkGreen"))
+                            .frame(width: 57, height: 100, alignment: .center)
+                            .cornerRadius(10)
+                            .overlay {
+                                ZStack {
+                                    VStack{
+                                        Image("red_dice1")
+                                            .resizable()
+                                            .frame(width:40, height: 40, alignment: .center)
+                                        Image("red_dice2")
+                                            .resizable()
+                                            .frame(width:40, height: 40, alignment: .center)
+                                    }
+                                    Image("YellowChips")
+                                        .resizable()
+                                        .opacity(userHandler.isBetOneTwo ? 1 : 0 )
+                                        .modifier(CasinoChipModifier())
+                                }
                             }
-                        }
-                    Rectangle()
-                        .fill(Color("DarkGreen"))
-                        .frame(width: 57, height: 100, alignment: .center)
-                        .cornerRadius(10)
-                        .overlay {
-                            VStack{
-                                Image("red_dice1")
-                                    .resizable()
-                                    .frame(width:40, height: 40, alignment: .center)
-                                Image("red_dice3")
-                                    .resizable()
-                                    .frame(width:40, height: 40, alignment: .center)
+                    }
+                    
+                    Button {
+                        userHandler.chooseBetOneThree()
+                    } label: {
+                        Rectangle()
+                            .fill(Color("DarkGreen"))
+                            .frame(width: 57, height: 100, alignment: .center)
+                            .cornerRadius(10)
+                            .overlay {
+                                ZStack {
+                                    VStack{
+                                        Image("red_dice1")
+                                            .resizable()
+                                            .frame(width:40, height: 40, alignment: .center)
+                                        Image("red_dice3")
+                                            .resizable()
+                                            .frame(width:40, height: 40, alignment: .center)
+                                    }
+                                    Image("YellowChips")
+                                        .resizable()
+                                        .opacity(userHandler.isBetOneThree ? 1 : 0 )
+                                        .modifier(CasinoChipModifier())
+                                }
                             }
-                        }
-                    Rectangle()
-                        .fill(Color("DarkGreen"))
-                        .frame(width: 57, height: 100, alignment: .center)
-                        .cornerRadius(10)
-                        .overlay {
-                            VStack{
-                                Image("red_dice1")
-                                    .resizable()
-                                    .frame(width:40, height: 40, alignment: .center)
-                                Image("red_dice4")
-                                    .resizable()
-                                    .frame(width:40, height: 40, alignment: .center)
+                    }
+                    
+                    Button {
+                        userHandler.chooseBetOneFour()
+                    } label: {
+                        Rectangle()
+                            .fill(Color("DarkGreen"))
+                            .frame(width: 57, height: 100, alignment: .center)
+                            .cornerRadius(10)
+                            .overlay {
+                                ZStack {
+                                    VStack{
+                                        Image("red_dice1")
+                                            .resizable()
+                                            .frame(width:40, height: 40, alignment: .center)
+                                        Image("red_dice4")
+                                            .resizable()
+                                            .frame(width:40, height: 40, alignment: .center)
+                                    }
+                                    Image("YellowChips")
+                                        .resizable()
+                                        .opacity(userHandler.isBetOneFour ? 1 : 0 )
+                                        .modifier(CasinoChipModifier())
+                                }
                             }
-                        }
-                    Rectangle()
-                        .fill(Color("DarkGreen"))
-                        .frame(width: 57, height: 100, alignment: .center)
-                        .cornerRadius(10)
-                        .overlay {
-                            VStack{
-                                Image("red_dice1")
-                                    .resizable()
-                                    .frame(width:40, height: 40, alignment: .center)
-                                Image("red_dice5")
-                                    .resizable()
-                                    .frame(width:40, height: 40, alignment: .center)
+                    }
+                    
+                    Button {
+                        userHandler.chooseBetOneFive()
+                    } label: {
+                        Rectangle()
+                            .fill(Color("DarkGreen"))
+                            .frame(width: 57, height: 100, alignment: .center)
+                            .cornerRadius(10)
+                            .overlay {
+                                ZStack {
+                                    VStack{
+                                        Image("red_dice1")
+                                            .resizable()
+                                            .frame(width:40, height: 40, alignment: .center)
+                                        Image("red_dice5")
+                                            .resizable()
+                                            .frame(width:40, height: 40, alignment: .center)
+                                    }
+                                    Image("YellowChips")
+                                        .resizable()
+                                        .opacity(userHandler.isBetOneFive ? 1 : 0 )
+                                        .modifier(CasinoChipModifier())
+                                }
                             }
-                        }
-                    Rectangle()
-                        .fill(Color("DarkGreen"))
-                        .frame(width: 57, height: 100, alignment: .center)
-                        .cornerRadius(10)
-                        .overlay {
-                            VStack{
-                                Image("red_dice1")
-                                    .resizable()
-                                    .frame(width:40, height: 40, alignment: .center)
-                                Image("red_dice6")
-                                    .resizable()
-                                    .frame(width:40, height: 40, alignment: .center)
+                    }
+                    
+                    Button {
+                        userHandler.chooseBetOneSix()
+                    } label: {
+                        Rectangle()
+                            .fill(Color("DarkGreen"))
+                            .frame(width: 57, height: 100, alignment: .center)
+                            .cornerRadius(10)
+                            .overlay {
+                                ZStack {
+                                    VStack{
+                                        Image("red_dice1")
+                                            .resizable()
+                                            .frame(width:40, height: 40, alignment: .center)
+                                        Image("red_dice6")
+                                            .resizable()
+                                            .frame(width:40, height: 40, alignment: .center)
+                                    }
+                                    Image("YellowChips")
+                                        .resizable()
+                                        .opacity(userHandler.isBetOneSix ? 1 : 0 )
+                                        .modifier(CasinoChipModifier())
+                                }
                             }
-                        }
-                    Rectangle()
-                        .fill(Color("DarkGreen"))
-                        .frame(width: 57, height: 100, alignment: .center)
-                        .cornerRadius(10)
-                        .overlay {
-                            VStack{
-                                Image("red_dice2")
-                                    .resizable()
-                                    .frame(width:40, height: 40, alignment: .center)
-                                Image("red_dice3")
-                                    .resizable()
-                                    .frame(width:40, height: 40, alignment: .center)
+                    }
+                    
+                    Button {
+                        userHandler.chooseBetTwoThree()
+                    } label: {
+                        Rectangle()
+                            .fill(Color("DarkGreen"))
+                            .frame(width: 57, height: 100, alignment: .center)
+                            .cornerRadius(10)
+                            .overlay {
+                                ZStack {
+                                    VStack{
+                                        Image("red_dice2")
+                                            .resizable()
+                                            .frame(width:40, height: 40, alignment: .center)
+                                        Image("red_dice3")
+                                            .resizable()
+                                            .frame(width:40, height: 40, alignment: .center)
+                                    }
+                                    Image("YellowChips")
+                                        .resizable()
+                                        .opacity(userHandler.isBetTwoThree ? 1 : 0 )
+                                        .modifier(CasinoChipModifier())
+                                }
                             }
-                        }
+                    }
                 }
                 HStack {
-                    Rectangle()
-                        .fill(Color("DarkGreen"))
-                        .frame(width: 57, height: 100, alignment: .center)
-                        .cornerRadius(10)
-                        .overlay {
-                            VStack{
-                                Image("red_dice2")
-                                    .resizable()
-                                    .frame(width:40, height: 40, alignment: .center)
-                                Image("red_dice4")
-                                    .resizable()
-                                    .frame(width:40, height: 40, alignment: .center)
+                    Button {
+                        userHandler.chooseBetTwoFour()
+                    } label: {
+                        Rectangle()
+                            .fill(Color("DarkGreen"))
+                            .frame(width: 57, height: 100, alignment: .center)
+                            .cornerRadius(10)
+                            .overlay {
+                                ZStack {
+                                    VStack{
+                                        Image("red_dice2")
+                                            .resizable()
+                                            .frame(width:40, height: 40, alignment: .center)
+                                        Image("red_dice4")
+                                            .resizable()
+                                            .frame(width:40, height: 40, alignment: .center)
+                                    }
+                                    Image("YellowChips")
+                                        .resizable()
+                                        .opacity(userHandler.isBetTwoFour ? 1 : 0 )
+                                        .modifier(CasinoChipModifier())
+                                }
                             }
-                        }
-                    Rectangle()
-                        .fill(Color("DarkGreen"))
-                        .frame(width: 57, height: 100, alignment: .center)
-                        .cornerRadius(10)
-                        .overlay {
-                            VStack{
-                                Image("red_dice2")
-                                    .resizable()
-                                    .frame(width:40, height: 40, alignment: .center)
-                                Image("red_dice5")
-                                    .resizable()
-                                    .frame(width:40, height: 40, alignment: .center)
+                    }
+                    
+                    Button {
+                        userHandler.chooseBetTwoFive()
+                    } label: {
+                        Rectangle()
+                            .fill(Color("DarkGreen"))
+                            .frame(width: 57, height: 100, alignment: .center)
+                            .cornerRadius(10)
+                            .overlay {
+                                ZStack {
+                                    VStack{
+                                        Image("red_dice2")
+                                            .resizable()
+                                            .frame(width:40, height: 40, alignment: .center)
+                                        Image("red_dice5")
+                                            .resizable()
+                                            .frame(width:40, height: 40, alignment: .center)
+                                    }
+                                    Image("YellowChips")
+                                        .resizable()
+                                        .opacity(userHandler.isBetTwoFive ? 1 : 0 )
+                                        .modifier(CasinoChipModifier())
+                                }
                             }
-                        }
-                    Rectangle()
-                        .fill(Color("DarkGreen"))
-                        .frame(width: 57, height: 100, alignment: .center)
-                        .cornerRadius(10)
-                        .overlay {
-                            VStack{
-                                Image("red_dice2")
-                                    .resizable()
-                                    .frame(width:40, height: 40, alignment: .center)
-                                Image("red_dice6")
-                                    .resizable()
-                                    .frame(width:40, height: 40, alignment: .center)
+                    }
+                    Button {
+                        userHandler.chooseBetTwoSix()
+                    } label: {
+                        Rectangle()
+                            .fill(Color("DarkGreen"))
+                            .frame(width: 57, height: 100, alignment: .center)
+                            .cornerRadius(10)
+                            .overlay {
+                                ZStack {
+                                    VStack{
+                                        Image("red_dice2")
+                                            .resizable()
+                                            .frame(width:40, height: 40, alignment: .center)
+                                        Image("red_dice6")
+                                            .resizable()
+                                            .frame(width:40, height: 40, alignment: .center)
+                                    }
+                                    Image("YellowChips")
+                                        .resizable()
+                                        .opacity(userHandler.isBetTwoSix ? 1 : 0 )
+                                        .modifier(CasinoChipModifier())
+                                }
                             }
-                        }
-                    Rectangle()
-                        .fill(Color("DarkGreen"))
-                        .frame(width: 57, height: 100, alignment: .center)
-                        .cornerRadius(10)
-                        .overlay {
-                            VStack{
-                                Image("red_dice3")
-                                    .resizable()
-                                    .frame(width:40, height: 40, alignment: .center)
-                                Image("red_dice4")
-                                    .resizable()
-                                    .frame(width:40, height: 40, alignment: .center)
+                    }
+                    
+                    Button {
+                        userHandler.chooseBetThreeFour()
+                    } label: {
+                        Rectangle()
+                            .fill(Color("DarkGreen"))
+                            .frame(width: 57, height: 100, alignment: .center)
+                            .cornerRadius(10)
+                            .overlay {
+                                ZStack {
+                                    VStack{
+                                        Image("red_dice3")
+                                            .resizable()
+                                            .frame(width:40, height: 40, alignment: .center)
+                                        Image("red_dice4")
+                                            .resizable()
+                                            .frame(width:40, height: 40, alignment: .center)
+                                    }
+                                    Image("YellowChips")
+                                        .resizable()
+                                        .opacity(userHandler.isBetThreeFour ? 1 : 0 )
+                                        .modifier(CasinoChipModifier())
+                                }
                             }
-                        }
-                    Rectangle()
-                        .fill(Color("DarkGreen"))
-                        .frame(width: 57, height: 100, alignment: .center)
-                        .cornerRadius(10)
-                        .overlay {
-                            VStack{
-                                Image("red_dice3")
-                                    .resizable()
-                                    .frame(width:40, height: 40, alignment: .center)
-                                Image("red_dice5")
-                                    .resizable()
-                                    .frame(width:40, height: 40, alignment: .center)
+                    }
+                    
+                    Button {
+                        userHandler.chooseBetThreeFive()
+                    } label: {
+                        Rectangle()
+                            .fill(Color("DarkGreen"))
+                            .frame(width: 57, height: 100, alignment: .center)
+                            .cornerRadius(10)
+                            .overlay {
+                                ZStack {
+                                    VStack{
+                                        Image("red_dice2")
+                                            .resizable()
+                                            .frame(width:40, height: 40, alignment: .center)
+                                        Image("red_dice6")
+                                            .resizable()
+                                            .frame(width:40, height: 40, alignment: .center)
+                                    }
+                                    Image("YellowChips")
+                                        .resizable()
+                                        .opacity(userHandler.isBetThreeFive ? 1 : 0 )
+                                        .modifier(CasinoChipModifier())
+                                }
                             }
-                        }
-                    Rectangle()
-                        .fill(Color("DarkGreen"))
-                        .frame(width: 57, height: 100, alignment: .center)
-                        .cornerRadius(10)
-                        .overlay {
-                            VStack{
-                                Image("red_dice3")
-                                    .resizable()
-                                    .frame(width:40, height: 40, alignment: .center)
-                                Image("red_dice6")
-                                    .resizable()
-                                    .frame(width:40, height: 40, alignment: .center)
+                    }
+                    
+                    Button {
+                        userHandler.chooseBetThreeSix()
+                    } label: {
+                        Rectangle()
+                            .fill(Color("DarkGreen"))
+                            .frame(width: 57, height: 100, alignment: .center)
+                            .cornerRadius(10)
+                            .overlay {
+                                ZStack {
+                                    VStack{
+                                        Image("red_dice3")
+                                            .resizable()
+                                            .frame(width:40, height: 40, alignment: .center)
+                                        Image("red_dice6")
+                                            .resizable()
+                                            .frame(width:40, height: 40, alignment: .center)
+                                    }
+                                    Image("YellowChips")
+                                        .resizable()
+                                        .opacity(userHandler.isBetThreeSix ? 1 : 0 )
+                                        .modifier(CasinoChipModifier())
+                                }
                             }
-                        }
+                    }
                 }
                 HStack{
-                    Rectangle()
-                        .fill(Color("DarkGreen"))
-                        .frame(width: 57, height: 100, alignment: .center)
-                        .cornerRadius(10)
-                        .overlay {
-                            VStack{
-                                Image("red_dice4")
-                                    .resizable()
-                                    .frame(width:40, height: 40, alignment: .center)
-                                Image("red_dice5")
-                                    .resizable()
-                                    .frame(width:40, height: 40, alignment: .center)
+                    Button {
+                        userHandler.chooseBetFourFive()
+                    } label: {
+                        Rectangle()
+                            .fill(Color("DarkGreen"))
+                            .frame(width: 57, height: 100, alignment: .center)
+                            .cornerRadius(10)
+                            .overlay {
+                                ZStack {
+                                    VStack{
+                                        Image("red_dice4")
+                                            .resizable()
+                                            .frame(width:40, height: 40, alignment: .center)
+                                        Image("red_dice5")
+                                            .resizable()
+                                            .frame(width:40, height: 40, alignment: .center)
+                                    }
+                                    Image("YellowChips")
+                                        .resizable()
+                                        .opacity(userHandler.isBetFourFive ? 1 : 0 )
+                                        .modifier(CasinoChipModifier())
+                                }
                             }
-                        }
-                    Rectangle()
-                        .fill(Color("DarkGreen"))
-                        .frame(width: 57, height: 100, alignment: .center)
-                        .cornerRadius(10)
-                        .overlay {
-                            VStack{
-                                Image("red_dice4")
-                                    .resizable()
-                                    .frame(width:40, height: 40, alignment: .center)
-                                Image("red_dice6")
-                                    .resizable()
-                                    .frame(width:40, height: 40, alignment: .center)
+                    }
+                    
+                    Button {
+                        userHandler.chooseBetFourSix()
+                    } label: {
+                        Rectangle()
+                            .fill(Color("DarkGreen"))
+                            .frame(width: 57, height: 100, alignment: .center)
+                            .cornerRadius(10)
+                            .overlay {
+                                ZStack {
+                                    VStack{
+                                        Image("red_dice4")
+                                            .resizable()
+                                            .frame(width:40, height: 40, alignment: .center)
+                                        Image("red_dice6")
+                                            .resizable()
+                                            .frame(width:40, height: 40, alignment: .center)
+                                    }
+                                    Image("YellowChips")
+                                        .resizable()
+                                        .opacity(userHandler.isBetFourSix ? 1 : 0 )
+                                        .modifier(CasinoChipModifier())
+                                }
                             }
-                        }
-                    Rectangle()
-                        .fill(Color("DarkGreen"))
-                        .frame(width: 57, height: 100, alignment: .center)
-                        .cornerRadius(10)
-                        .overlay {
-                            VStack{
-                                Image("red_dice5")
-                                    .resizable()
-                                    .frame(width:40, height: 40, alignment: .center)
-                                Image("red_dice6")
-                                    .resizable()
-                                    .frame(width:40, height: 40, alignment: .center)
+                    }
+                    
+                    Button {
+                        userHandler.chooseBetFiveSix()
+                    } label: {
+                        Rectangle()
+                            .fill(Color("DarkGreen"))
+                            .frame(width: 57, height: 100, alignment: .center)
+                            .cornerRadius(10)
+                            .overlay {
+                                ZStack {
+                                    VStack{
+                                        Image("red_dice5")
+                                            .resizable()
+                                            .frame(width:40, height: 40, alignment: .center)
+                                        Image("red_dice6")
+                                            .resizable()
+                                            .frame(width:40, height: 40, alignment: .center)
+                                    }
+                                    Image("YellowChips")
+                                        .resizable()
+                                        .opacity(userHandler.isBetFiveSix ? 1 : 0 )
+                                        .modifier(CasinoChipModifier())
+                                }
                             }
-                        }
+                    }
                 }
             }
 //                .fill(Color("Green"))

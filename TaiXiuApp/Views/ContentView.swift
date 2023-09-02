@@ -40,26 +40,31 @@ struct ContentView: View {
     // MARK: - CHECKING WINING LOGIC
     func CheckWinning() {
         
+        //MARK: - SUM OF 3 REELS LOGIC
         NumReel0 = reels[0] + 1
         NumReel1 = reels[1] + 1
         NumReel2 = reels[2] + 1
-        
         sum3Reel = NumReel0 + NumReel1 + NumReel2
         
-//        if reels[0] == reels[1] && reels[1] == reels[2] && reels[2] == reels[0] {
-//            //WINING LOGIC
-//            PlayerWins()
-//            if coins > highscore {
-//                newHighScore()
-//            } else {
-//                playSound(sound: "winning", type: "mp3")
-//            }
-//        } else {
-//            //LOSING LOGIC
-//            PlayerLoses()
-//        }
         
-        if (userHandler.isChooseBetSmall == true) {
+        //MARK: - CHECK IF USER CHOOSES ANY TRIPLE
+        if (userHandler.isBetAnyTriple == true){
+            if (NumReel0 == NumReel1 && NumReel1 == NumReel2 && NumReel2 == NumReel0){
+                //WINING LOGIC
+                PlayerWins()
+                if coins > highscore {
+                    newHighScore()
+                } else {
+                    playSound(sound: "winning", type: "mp3")
+                }
+            } else {
+                //LOSING LOGIC
+                PlayerLoses()
+            }
+        }
+        
+        //MARK: - CHECK IF USER CHOOSES SMALL
+        if (userHandler.isBetSmall == true) {
             if (sum3Reel >= 4 && sum3Reel <= 10){
                 PlayerWins()
                 if coins > highscore {
@@ -71,9 +76,431 @@ struct ContentView: View {
                 PlayerLoses()
             }
         }
+    
         
-        if (userHandler.isChooseBetBig == true) {
+        //MARK: - CHECK IF USER CHOOSES BIG
+        if (userHandler.isBetBig == true) {
             if (sum3Reel >= 11 && sum3Reel <= 17){
+                PlayerWins()
+                if coins > highscore {
+                    newHighScore()
+                } else {
+                    playSound(sound: "winning", type: "mp3")
+                }
+            } else {
+                PlayerLoses()
+            }
+        }
+        //MARK: - CHECK IF USER CHOOSES EVEN
+        if (userHandler.isBetEven == true) {
+            if (sum3Reel % 2 == 0) {
+                PlayerWins()
+                if coins > highscore {
+                    newHighScore()
+                } else {
+                    playSound(sound: "winning", type: "mp3")
+                }
+            } else {
+                PlayerLoses()
+            }
+        }
+        
+        //MARK: - CHECK IF USER CHOOSES ODD
+        if (userHandler.isBetOdd == true) {
+            if (sum3Reel % 2 != 0){
+                PlayerWins()
+                if coins > highscore {
+                    newHighScore()
+                } else {
+                    playSound(sound: "winning", type: "mp3")
+                }
+            } else {
+                PlayerLoses()
+            }
+        }
+        
+        //MARK: - CHECK IF USER BETS ONE
+        if (userHandler.isBetOne == true) {
+            if (NumReel0 == 1 || NumReel1 == 1 || NumReel2 == 1){
+                PlayerWins()
+                if coins > highscore {
+                    newHighScore()
+                } else {
+                    playSound(sound: "winning", type: "mp3")
+                }
+            } else {
+                PlayerLoses()
+            }
+        }
+        
+        //MARK: - CHECK IF USER BETS TWO
+        if (userHandler.isBetTwo == true) {
+            if (NumReel0 == 2 || NumReel1 == 2 || NumReel2 == 2){
+                PlayerWins()
+                if coins > highscore {
+                    newHighScore()
+                } else {
+                    playSound(sound: "winning", type: "mp3")
+                }
+            } else {
+                PlayerLoses()
+            }
+        }
+        
+        //MARK: - CHECK IF USER BETS THREE
+        if (userHandler.isBetThree == true) {
+            if (NumReel0 == 3 || NumReel1 == 3 || NumReel2 == 3){
+                PlayerWins()
+                if coins > highscore {
+                    newHighScore()
+                } else {
+                    playSound(sound: "winning", type: "mp3")
+                }
+            } else {
+                PlayerLoses()
+            }
+        }
+        
+        //MARK: - CHECK IF USER BETS FOUR
+        if (userHandler.isBetFour == true) {
+            if (NumReel0 == 4 || NumReel1 == 4 || NumReel2 == 4){
+                PlayerWins()
+                if coins > highscore {
+                    newHighScore()
+                } else {
+                    playSound(sound: "winning", type: "mp3")
+                }
+            } else {
+                PlayerLoses()
+            }
+        }
+        
+        //MARK: - CHECK IF USER BETS FIVE
+        if (userHandler.isBetFive == true) {
+            if (NumReel0 == 5 || NumReel1 == 5 || NumReel2 == 5){
+                PlayerWins()
+                if coins > highscore {
+                    newHighScore()
+                } else {
+                    playSound(sound: "winning", type: "mp3")
+                }
+            } else {
+                PlayerLoses()
+            }
+        }
+        
+        //MARK: - CHECK IF USER BETS SIX
+        if (userHandler.isBetSix == true) {
+            if (NumReel0 == 6 || NumReel1 == 6 || NumReel2 == 6){
+                PlayerWins()
+                if coins > highscore {
+                    newHighScore()
+                } else {
+                    playSound(sound: "winning", type: "mp3")
+                }
+            } else {
+                PlayerLoses()
+            }
+        }
+        
+        //MARK: - CHECK IF USER BETS DOUBLE ONE
+        if (userHandler.isBetDoubleOne == true) {
+            if ((NumReel0 == 1 && NumReel1 == 1) || (NumReel0 == 1 && NumReel2 == 1) || (NumReel1 == 1 && NumReel2 == 1)){
+                PlayerWins()
+                if coins > highscore {
+                    newHighScore()
+                } else {
+                    playSound(sound: "winning", type: "mp3")
+                }
+            } else {
+                PlayerLoses()
+            }
+        }
+        
+        //MARK: - CHECK IF USER BETS DOUBLE TWO
+        if (userHandler.isBetDoubleTwo == true) {
+            if ((NumReel0 == 2 && NumReel1 == 2) || (NumReel0 == 2 && NumReel2 == 2) || (NumReel1 == 2 && NumReel2 == 2)){
+                PlayerWins()
+                if coins > highscore {
+                    newHighScore()
+                } else {
+                    playSound(sound: "winning", type: "mp3")
+                }
+            } else {
+                PlayerLoses()
+            }
+        }
+        
+        //MARK: - CHECK IF USER BETS DOUBLE THREE
+        if (userHandler.isBetDoubleThree == true) {
+            if ((NumReel0 == 3 && NumReel1 == 3) || (NumReel0 == 3 && NumReel2 == 3) || (NumReel1 == 3 && NumReel2 == 3)){
+                PlayerWins()
+                if coins > highscore {
+                    newHighScore()
+                } else {
+                    playSound(sound: "winning", type: "mp3")
+                }
+            } else {
+                PlayerLoses()
+            }
+        }
+        
+        //MARK: - CHECK IF USER BETS DOUBLE FOUR
+        if (userHandler.isBetDoubleFour == true) {
+            if ((NumReel0 == 4 && NumReel1 == 4) || (NumReel0 == 4 && NumReel2 == 4) || (NumReel1 == 4 && NumReel2 == 4)){
+                PlayerWins()
+                if coins > highscore {
+                    newHighScore()
+                } else {
+                    playSound(sound: "winning", type: "mp3")
+                }
+            } else {
+                PlayerLoses()
+            }
+        }
+        
+        //MARK: - CHECK IF USER BETS DOUBLE FIVE
+        if (userHandler.isBetDoubleFive == true) {
+            if ((NumReel0 == 5 && NumReel1 == 5) || (NumReel0 == 5 && NumReel2 == 5) || (NumReel1 == 5 && NumReel2 == 5)){
+                PlayerWins()
+                if coins > highscore {
+                    newHighScore()
+                } else {
+                    playSound(sound: "winning", type: "mp3")
+                }
+            } else {
+                PlayerLoses()
+            }
+        }
+        
+        //MARK: - CHECK IF USER BETS DOUBLE SIX
+        if (userHandler.isBetDoubleSix == true) {
+            if ((NumReel0 == 6 && NumReel1 == 6) || (NumReel0 == 6 && NumReel2 == 6) || (NumReel1 == 6 && NumReel2 == 6)){
+                PlayerWins()
+                if coins > highscore {
+                    newHighScore()
+                } else {
+                    playSound(sound: "winning", type: "mp3")
+                }
+            } else {
+                PlayerLoses()
+            }
+        }
+        
+        //MARK: - CHECK IF USER BETS ONE TWO
+        if (userHandler.isBetOneTwo == true) {
+            if ((NumReel0 == 1 && NumReel1 == 2) || (NumReel0 == 2 && NumReel1 == 1)
+                || (NumReel0 == 1 && NumReel2 == 2) || (NumReel0 == 2 && NumReel2 == 1) || (NumReel1 == 1 && NumReel2 == 2) || (NumReel1 == 2 && NumReel2 == 1)){
+                PlayerWins()
+                if coins > highscore {
+                    newHighScore()
+                } else {
+                    playSound(sound: "winning", type: "mp3")
+                }
+            } else {
+                PlayerLoses()
+            }
+        }
+        
+        //MARK: - CHECK IF USER BETS ONE THREE
+        if (userHandler.isBetOneThree == true) {
+            if ((NumReel0 == 1 && NumReel1 == 3) || (NumReel0 == 3 && NumReel1 == 1)
+                || (NumReel0 == 1 && NumReel2 == 3) || (NumReel0 == 3 && NumReel2 == 1) || (NumReel1 == 1 && NumReel2 == 3) || (NumReel1 == 3 && NumReel2 == 1)){
+                PlayerWins()
+                if coins > highscore {
+                    newHighScore()
+                } else {
+                    playSound(sound: "winning", type: "mp3")
+                }
+            } else {
+                PlayerLoses()
+            }
+        }
+        
+        //MARK: - CHECK IF USER BETS ONE FOUR
+        if (userHandler.isBetOneFour == true) {
+            if ((NumReel0 == 1 && NumReel1 == 4) || (NumReel0 == 4 && NumReel1 == 1)
+                || (NumReel0 == 1 && NumReel2 == 4) || (NumReel0 == 4 && NumReel2 == 1) || (NumReel1 == 1 && NumReel2 == 4) || (NumReel1 == 4 && NumReel2 == 1)){
+                PlayerWins()
+                if coins > highscore {
+                    newHighScore()
+                } else {
+                    playSound(sound: "winning", type: "mp3")
+                }
+            } else {
+                PlayerLoses()
+            }
+        }
+        
+        //MARK: - CHECK IF USER BETS ONE FIVE
+        if (userHandler.isBetOneFive == true) {
+            if ((NumReel0 == 1 && NumReel1 == 5) || (NumReel0 == 5 && NumReel1 == 1)
+                || (NumReel0 == 1 && NumReel2 == 5) || (NumReel0 == 5 && NumReel2 == 1) || (NumReel1 == 1 && NumReel2 == 5) || (NumReel1 == 5 && NumReel2 == 1)){
+                PlayerWins()
+                if coins > highscore {
+                    newHighScore()
+                } else {
+                    playSound(sound: "winning", type: "mp3")
+                }
+            } else {
+                PlayerLoses()
+            }
+        }
+        
+        //MARK: - CHECK IF USER BETS ONE SIX
+        if (userHandler.isBetOneSix == true) {
+            if ((NumReel0 == 1 && NumReel1 == 6) || (NumReel0 == 6 && NumReel1 == 1)
+                || (NumReel0 == 1 && NumReel2 == 6) || (NumReel0 == 6 && NumReel2 == 1) || (NumReel1 == 1 && NumReel2 == 6) || (NumReel1 == 6 && NumReel2 == 1)){
+                PlayerWins()
+                if coins > highscore {
+                    newHighScore()
+                } else {
+                    playSound(sound: "winning", type: "mp3")
+                }
+            } else {
+                PlayerLoses()
+            }
+        }
+        
+        //MARK: - CHECK IF USER BETS TWO THREE
+        if (userHandler.isBetTwoThree == true) {
+            if ((NumReel0 == 2 && NumReel1 == 3) || (NumReel0 == 3 && NumReel1 == 2)
+                || (NumReel0 == 2 && NumReel2 == 3) || (NumReel0 == 3 && NumReel2 == 2) || (NumReel1 == 2 && NumReel2 == 3) || (NumReel1 == 3 && NumReel2 == 2)){
+                PlayerWins()
+                if coins > highscore {
+                    newHighScore()
+                } else {
+                    playSound(sound: "winning", type: "mp3")
+                }
+            } else {
+                PlayerLoses()
+            }
+        }
+        
+        //MARK: - CHECK IF USER BETS TWO FOUR
+        if (userHandler.isBetTwoFour == true) {
+            if ((NumReel0 == 2 && NumReel1 == 4) || (NumReel0 == 4 && NumReel1 == 2)
+                || (NumReel0 == 2 && NumReel2 == 4) || (NumReel0 == 4 && NumReel2 == 2) || (NumReel1 == 2 && NumReel2 == 4) || (NumReel1 == 4 && NumReel2 == 2)){
+                PlayerWins()
+                if coins > highscore {
+                    newHighScore()
+                } else {
+                    playSound(sound: "winning", type: "mp3")
+                }
+            } else {
+                PlayerLoses()
+            }
+        }
+        
+        //MARK: - CHECK IF USER BETS TWO FIVE
+        if (userHandler.isBetTwoFive == true) {
+            if ((NumReel0 == 2 && NumReel1 == 5) || (NumReel0 == 5 && NumReel1 == 2)
+                || (NumReel0 == 2 && NumReel2 == 5) || (NumReel0 == 5 && NumReel2 == 2) || (NumReel1 == 2 && NumReel2 == 5) || (NumReel1 == 5 && NumReel2 == 2)){
+                PlayerWins()
+                if coins > highscore {
+                    newHighScore()
+                } else {
+                    playSound(sound: "winning", type: "mp3")
+                }
+            } else {
+                PlayerLoses()
+            }
+        }
+        
+        //MARK: - CHECK IF USER BETS TWO SIX
+        if (userHandler.isBetTwoSix == true) {
+            if ((NumReel0 == 2 && NumReel1 == 6) || (NumReel0 == 6 && NumReel1 == 2)
+                || (NumReel0 == 2 && NumReel2 == 6) || (NumReel0 == 6 && NumReel2 == 2) || (NumReel1 == 2 && NumReel2 == 6) || (NumReel1 == 6 && NumReel2 == 2)){
+                PlayerWins()
+                if coins > highscore {
+                    newHighScore()
+                } else {
+                    playSound(sound: "winning", type: "mp3")
+                }
+            } else {
+                PlayerLoses()
+            }
+        }
+        
+        //MARK: - CHECK IF USER BETS THREE FOUR
+        if (userHandler.isBetThreeFour == true) {
+            if ((NumReel0 == 3 && NumReel1 == 4) || (NumReel0 == 4 && NumReel1 == 3)
+                || (NumReel0 == 3 && NumReel2 == 4) || (NumReel0 == 4 && NumReel2 == 3) || (NumReel1 == 3 && NumReel2 == 4) || (NumReel1 == 4 && NumReel2 == 3)){
+                PlayerWins()
+                if coins > highscore {
+                    newHighScore()
+                } else {
+                    playSound(sound: "winning", type: "mp3")
+                }
+            } else {
+                PlayerLoses()
+            }
+        }
+        
+        //MARK: - CHECK IF USER BETS THREE FIVE
+        if (userHandler.isBetThreeFive == true) {
+            if ((NumReel0 == 3 && NumReel1 == 5) || (NumReel0 == 5 && NumReel1 == 3)
+                || (NumReel0 == 3 && NumReel2 == 5) || (NumReel0 == 5 && NumReel2 == 3) || (NumReel1 == 3 && NumReel2 == 5) || (NumReel1 == 5 && NumReel2 == 3)){
+                PlayerWins()
+                if coins > highscore {
+                    newHighScore()
+                } else {
+                    playSound(sound: "winning", type: "mp3")
+                }
+            } else {
+                PlayerLoses()
+            }
+        }
+        
+        //MARK: - CHECK IF USER BETS THREE SIX
+        if (userHandler.isBetThreeSix == true) {
+            if ((NumReel0 == 3 && NumReel1 == 6) || (NumReel0 == 6 && NumReel1 == 3)
+                || (NumReel0 == 3 && NumReel2 == 6) || (NumReel0 == 6 && NumReel2 == 3) || (NumReel1 == 3 && NumReel2 == 6) || (NumReel1 == 6 && NumReel2 == 3)){
+                PlayerWins()
+                if coins > highscore {
+                    newHighScore()
+                } else {
+                    playSound(sound: "winning", type: "mp3")
+                }
+            } else {
+                PlayerLoses()
+            }
+        }
+        
+        //MARK: - CHECK IF USER BETS FOUR FIVE
+        if (userHandler.isBetFourFive == true) {
+            if ((NumReel0 == 4 && NumReel1 == 5) || (NumReel0 == 5 && NumReel1 == 4)
+                || (NumReel0 == 4 && NumReel2 == 5) || (NumReel0 == 5 && NumReel2 == 4) || (NumReel1 == 4 && NumReel2 == 5) || (NumReel1 == 5 && NumReel2 == 4)){
+                PlayerWins()
+                if coins > highscore {
+                    newHighScore()
+                } else {
+                    playSound(sound: "winning", type: "mp3")
+                }
+            } else {
+                PlayerLoses()
+            }
+        }
+        
+        //MARK: - CHECK IF USER BETS FOUR SIX
+        if (userHandler.isBetFourSix == true) {
+            if ((NumReel0 == 4 && NumReel1 == 6) || (NumReel0 == 6 && NumReel1 == 4)
+                || (NumReel0 == 4 && NumReel2 == 6) || (NumReel0 == 6 && NumReel2 == 4) || (NumReel1 == 4 && NumReel2 == 6) || (NumReel1 == 6 && NumReel2 == 4)){
+                PlayerWins()
+                if coins > highscore {
+                    newHighScore()
+                } else {
+                    playSound(sound: "winning", type: "mp3")
+                }
+            } else {
+                PlayerLoses()
+            }
+        }
+        
+        //MARK: - CHECK IF USER BETS FIVE SIX
+        if (userHandler.isBetFiveSix == true) {
+            if ((NumReel0 == 5 && NumReel1 == 6) || (NumReel0 == 6 && NumReel1 == 5)
+                || (NumReel0 == 5 && NumReel2 == 6) || (NumReel0 == 6 && NumReel2 == 5) || (NumReel1 == 5 && NumReel2 == 6) || (NumReel1 == 6 && NumReel2 == 5)){
                 PlayerWins()
                 if coins > highscore {
                     newHighScore()
@@ -136,7 +563,7 @@ struct ContentView: View {
             Color("Green")
                 .edgesIgnoringSafeArea(.all)
             
-            // MARK: - LOGO HEADER
+            // MARK: - GAME UI
             VStack{
                 HStack{
                     Button {
