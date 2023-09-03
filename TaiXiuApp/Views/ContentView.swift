@@ -10,13 +10,17 @@ import SwiftUI
 struct ContentView: View {
     @AppStorage("players") private var playerData: Data = Data()
     @StateObject private var players:PlayerModel = PlayerModel()
+    @State var gameLevel: Int = 1
+    @State var selectedLevel: Int = 1
+    @State var AchivementPlayerIndex: Int = -1
     // MARK: - PROPERTIES
     let icons = ["dice1","dice2","dice3","dice4","dice5","dice6"]
 //    let icons = ["apple","bar","bell"]
     @EnvironmentObject var userProgress: UserHandler
     @StateObject var userHandler = UserHandler()
+    @State var BetRatios: Int = 1
     @State var reels = [0,1,2]
-    @State var coins = 100
+    @State var coins = 500
     @State var betAmount = 10
     @State var highscore = 0
     @State var isChooseBet10 = true
@@ -29,8 +33,24 @@ struct ContentView: View {
     @State var NumReel1 = 0
     @State var NumReel2 = 0
     @State var sum3Reel = 0
-    
     @Binding var currentPlayerIndex: Int
+    
+    // MARK: -SELECT LEVEL
+    func adjustGameLogicForLevel() {
+        switch selectedLevel {
+        case 1:
+            BetRatios = 1
+        case 2:
+            BetRatios = 2
+            // Adjust win conditions and other parameters for medium level
+        case 3:
+            BetRatios = 3
+            // Adjust win conditions and other parameters for hard level
+        default:
+            BetRatios = 1
+        }
+        print(BetRatios)
+    }
     // MARK: - LOGIC SPIN REELS
     func spinReels(){
 //        reels[0] = Int.random(in: 0...icons.count-1)
@@ -65,6 +85,22 @@ struct ContentView: View {
             } else {
                 //LOSING LOGIC
                 PlayerLoses()
+            }
+            // newAchievement = Achievement (name, image)
+            // .achivements.append(newAchievement)
+            //
+            let newAchievement = Achievement(name: "Win Triple", image: "champion")
+            addAchievementToPlayer(player: &players.players[currentPlayerIndex], achievement: newAchievement)
+
+        }
+            
+        func addAchievementToPlayer(player: inout Player, achievement: Achievement) {
+            // Check if the player's achievements array already contains an achievement with the given name
+            if !player.achievements.contains(where: { $0.name == achievement.name }) {
+                // If it doesn't contain the achievement, then add it
+                player.achievements.append(achievement)
+            } else {
+                print("Achievement \(achievement.name) already exists for player \(player.username). Not adding again.")
             }
         }
         
@@ -520,18 +556,18 @@ struct ContentView: View {
     
     // MARK: - PLAYER WINING LOGIC
     func PlayerWins(){
-        coins += betAmount*10
-        players.players[currentPlayerIndex].UserMoney = coins
+        coins += betAmount*BetRatios
+//        players.players[currentPlayerIndex].UserMoney = coins
     }
     // MARK: - HIGHSCCORE LOGIC
     func newHighScore(){
         highscore = coins
-        players.players[currentPlayerIndex].HighScore = highscore
+//        players.players[currentPlayerIndex].HighScore = highscore
         playSound(sound: "highscore", type: "mp3")
     }
     // MARK: - PLAYER LOSING LOGIC
     func PlayerLoses(){
-        coins -= betAmount;
+        coins -= betAmount*BetRatios
     }
     // MARK: - BET 20 LOGIC
     func ChooseBet20 (){
@@ -550,6 +586,7 @@ struct ContentView: View {
     // MARK: - GAMEOVER LOGIC
     func isGameOver(){
         if (coins <= 0){
+            coins = 0
             showGameOverMessage = true
             playSound(sound: "gameover", type: "mp3")
         }
@@ -563,212 +600,214 @@ struct ContentView: View {
     }
     
     var body: some View {
-        ZStack{
-            // MARK: - BACKGROUND
-            
-//            LinearGradient(gradient: Gradient(colors: [Color("RmitRed"),Color("RmitPurple")]), startPoint:.top, endPoint: .bottom)
-            Color("Green")
-                .edgesIgnoringSafeArea(.all)
-            
-            // MARK: - GAME UI
-            VStack{
-                HStack{
-                    Button {
-                        self.resetGame()
-                    } label: {
-                        Image(systemName: "arrow.2.circlepath.circle")
-                            .font(.title2)
-                            .foregroundColor(.white)
-                            .padding(.horizontal, 10)
-                            .offset(x: 10)
-                    }
-                    
-                    Spacer()
-                    
-                    Button {
-                        showInfoView = true
-                    } label: {
-                        Image(systemName: "info.circle")
-                            .font(.title2)
-                            .foregroundColor(.white)
-                            .padding(.horizontal, 10)
-                            .offset(x: -10)
-                    }
-                }
-                .offset(y: 140)
-                // MARK: - SHOW MONEY AND HIGHSCORE
-                HStack{
-                    HStack{
-                        Text("Your\nMoney".uppercased())
-                            .modifier(ScoreLabelModifiers())
-                        Text("\(coins)")
-                        .modifier(ScoreNumberModifiers())
-                    }
-                    .modifier(ScoreCapsuleStyle())
-                    
-                    Spacer()
-                    Button {
-                        showLeaderBoard = true
-                    } label: {
-                        Image(systemName: "trophy.fill")
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 31, height: 31)
-                            .foregroundColor(.yellow)
-                    }
-
-                    Spacer()
-                    
-                    HStack{
-                        Text("High\nScore".uppercased())
-                            .modifier(ScoreLabelModifiers())
-                        Text("\(highscore)")
-                        .modifier(ScoreNumberModifiers())
-                    }
-                    .modifier(ScoreCapsuleStyle())
-                }
-                .padding()
-                .offset(y: 15)
+        NavigationView {
+            ZStack{
+                // MARK: - BACKGROUND
                 
-                Spacer()
+    //            LinearGradient(gradient: Gradient(colors: [Color("RmitRed"),Color("RmitPurple")]), startPoint:.top, endPoint: .bottom)
+                Color("Green")
+                    .edgesIgnoringSafeArea(.all)
                 
-                // MARK: - Reel Machine Slot
+                // MARK: - GAME UI
                 VStack{
                     HStack{
-                        // MARK: - First Reel
-                        ReelView(reelIcon: icons[reels[0]], AnimatingIcon: animationIcon)
-                        // MARK: - Second and Third Reel
-                        ReelView(reelIcon: icons[reels[1]], AnimatingIcon: animationIcon)
-                        ReelView(reelIcon: icons[reels[2]], AnimatingIcon: animationIcon)
+                        Button {
+                            self.resetGame()
+                        } label: {
+                            Image(systemName: "arrow.2.circlepath.circle")
+                                .font(.title2)
+                                .foregroundColor(.white)
+                                .padding(.horizontal, 10)
+                                .offset(x: 10)
+                        }
+                        
+                        Spacer()
+                        
+                        Button(action: {
+                            // Navigate to ContentView
+                        }) {
+                                NavigationLink(
+                                    destination: SettingView(gameLevel: $gameLevel, selectedLevel: $selectedLevel, currentPlayerIndex: $currentPlayerIndex),
+                                    label: {
+                                        Image(systemName: "gearshape")
+                                            .font(.title2)
+                                            .foregroundColor(.white)
+                                            .padding(.horizontal, 10)
+                                            .offset(x: -10)
+                                    }
+
+                                )
                     }
-                    
-                    SicboTableView(userHandler: userHandler)
+                    }
+                    .offset(y: 140)
+                    // MARK: - SHOW MONEY AND HIGHSCORE
+                    HStack{
+                        HStack{
+                            Text("Your\nMoney".uppercased())
+                                .modifier(ScoreLabelModifiers())
+                            Text("\(coins)")
+                            .modifier(ScoreNumberModifiers())
+                        }
+                        .modifier(ScoreCapsuleStyle())
+                        
+                        Spacer()
+                        Button {
+                            showLeaderBoard = true
+                        } label: {
+                            Image(systemName: "trophy.fill")
+                                .resizable()
+                                .scaledToFill()
+                                .frame(width: 31, height: 31, alignment: .center)
+                                .foregroundColor(.yellow)
+                        }
+
+                        Spacer()
+                        
+                        HStack{
+                            Text("High\nScore".uppercased())
+                                .modifier(ScoreLabelModifiers())
+                            Text("\(highscore)")
+                            .modifier(ScoreNumberModifiers())
+                        }
+                        .modifier(ScoreCapsuleStyle())
+                    }
+                    .padding()
+                    .offset(y: 15)
                     
                     Spacer()
                     
-                    HStack {
-                        // MARK: - Bet Money 20$ Option
-                        Button {
-                            ChooseBet20()
-                        } label: {
-                            HStack{
-                                Text("20")
-                                    .modifier(BetCapsuleModifier())
-                                Image("YellowChips")
-                                    .resizable()
-                                    .opacity(isChooseBet20 ? 1: 0)
-                                    .modifier(CasinoChipModifier())
-                            }
-                        }
-                        Spacer()
-                        
-                        // MARK: - Spin Button
-                        Button {
-                            withAnimation {
-                                animationIcon = false
-                            }
-                            spinReels()
-                            withAnimation {
-                                animationIcon = true
-                            }
-                            print(reels)
-                            CheckWinning()
-                            print(coins)
-                            print(sum3Reel)
-                            players.players[currentPlayerIndex].HighScore = highscore
-                            players.players[currentPlayerIndex].UserMoney = coins
-                            isGameOver()
-                            savePlayers()
-                        } label: {
-                            Image("Goldspin")
-                                .resizable()
-                                .frame(width: 80, height: 80)
-                                .modifier(ReelImageModifier())
-                        }
-                        
-                        Spacer()
-                        // MARK: - Bet Money 10$ Option
-                        Button {
-                            ChooseBet10()
-                        } label: {
-                            HStack{
-                                Image("YellowChips")
-                                    .resizable()
-                                    .modifier(CasinoChipModifier())
-                                    .opacity(isChooseBet10 ? 1: 0)
-                                Text("10")
-                                    .modifier(BetCapsuleModifier())
-                            }
-                        }
-                    }
-                    .padding()
-                    .offset(y: -40)
-                }
-            }
-            //VStack
-            .offset(y: 10)
-            if showGameOverMessage {
-                ZStack{
-                    Color("RmitBlue")
+                    // MARK: - Reel Machine Slot
                     VStack{
-                        Text("Game Over!!!")
-                            .font(.system(size: 30))
-                            .padding()
-                            .foregroundColor(.white)
-                            .frame(width:280)
-                            .background(Color("RmitRed"))
+                        HStack{
+                            // MARK: - First Reel
+                            ReelView(reelIcon: icons[reels[0]], AnimatingIcon: animationIcon)
+                            // MARK: - Second and Third Reel
+                            ReelView(reelIcon: icons[reels[1]], AnimatingIcon: animationIcon)
+                            ReelView(reelIcon: icons[reels[2]], AnimatingIcon: animationIcon)
+                        }
+                        
+                        SicboTableView(userHandler: userHandler)
+                        
                         Spacer()
                         
-                        VStack{
-                            Image("rmit-casino-logo")
-                                .resizable()
-                                .scaledToFit()
-                                .frame(width: 200)
-                            Text("You lost all your money!\nYou are not the god of gambler!")
-                                .font(.system(size: 17))
-                                .foregroundColor(.white)
-                                .multilineTextAlignment(.center)
+                        HStack {
+                            // MARK: - Bet Money 20$ Option
                             Button {
-                                showGameOverMessage = false
-                                coins = 100
+                                ChooseBet20()
                             } label: {
-                                Text("New Game".uppercased())
-                                    .padding(.vertical, 10)
-                                    .padding(.horizontal, 20)
-                                    .background(
-                                    Capsule()
-                                        .fill(Color("RmitRed"))
-                                    )
+                                HStack{
+                                    Text("20")
+                                        .modifier(BetCapsuleModifier())
+                                    Image("YellowChips")
+                                        .resizable()
+                                        .opacity(isChooseBet20 ? 1: 0)
+                                        .modifier(CasinoChipModifier())
+                                }
                             }
-
+                            Spacer()
+                            
+                            // MARK: - Spin Button
+                            
+                            Button {
+                                withAnimation {
+                                    animationIcon = false
+                                }
+                                spinReels()
+                                withAnimation {
+                                    animationIcon = true
+                                }
+                                print(reels)
+                                CheckWinning()
+                                print(coins)
+                                print(sum3Reel)
+                                adjustGameLogicForLevel()
+                                isGameOver()
+                                if currentPlayerIndex >= 0 && currentPlayerIndex < players.players.count {
+                                    players.players[currentPlayerIndex].UserMoney = coins
+                                    players.players[currentPlayerIndex].HighScore = highscore
+                                }
+                                savePlayers()
+                            } label: {
+                                Image("Goldspin")
+                                    .resizable()
+                                    .frame(width: 80, height: 80)
+                                    .modifier(ReelImageModifier())
+                            }
+                            
+                            Spacer()
+                            // MARK: - Bet Money 10$ Option
+                            Button {
+                                ChooseBet10()
+                            } label: {
+                                HStack{
+                                    Image("YellowChips")
+                                        .resizable()
+                                        .modifier(CasinoChipModifier())
+                                        .opacity(isChooseBet10 ? 1: 0)
+                                    Text("10")
+                                        .modifier(BetCapsuleModifier())
+                                }
+                            }
                         }
-                        Spacer()
+                        .padding()
+                        .offset(y: -40)
                     }
                 }
-                .frame(width: 280, height: 400)
-                .cornerRadius(20)
-            }
-        } //ZStack
-        .sheet(isPresented: $showInfoView){
-            InfoView()
-        }
-        
-        .sheet(isPresented: $showLeaderBoard){
-           LeaderViewBoard()
-        }
-        .onAppear{
-            loadPlayers()
-            if currentPlayerIndex != -1 {
-                if players.players[currentPlayerIndex].HighScore == 0 {
-                    players.players[currentPlayerIndex].UserMoney = 100
-                    coins = players.players[currentPlayerIndex].UserMoney
+                //VStack
+                .offset(y: 10)
+                if showGameOverMessage {
+                    ZStack{
+                        Color("RmitBlue")
+                        VStack{
+                            Text("Game Over!!!")
+                                .font(.system(size: 30))
+                                .padding()
+                                .foregroundColor(.white)
+                                .frame(width:280)
+                                .background(Color("RmitRed"))
+                            Spacer()
+                            
+                            VStack{
+                                Image("rmit-casino-logo")
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(width: 200)
+                                Text("You lost all your money!\nYou are not the god of gambler!")
+                                    .font(.system(size: 17))
+                                    .foregroundColor(.white)
+                                    .multilineTextAlignment(.center)
+                                Button {
+                                    showGameOverMessage = false
+                                    coins = 100
+                                } label: {
+                                    Text("New Game".uppercased())
+                                        .padding(.vertical, 10)
+                                        .padding(.horizontal, 20)
+                                        .background(
+                                        Capsule()
+                                            .fill(Color("RmitRed"))
+                                        )
+                                }
+
+                            }
+                            Spacer()
+                        }
+                    }
+                    .frame(width: 280, height: 400)
+                    .cornerRadius(20)
                 }
-                else {
-                    coins = players.players[currentPlayerIndex].UserMoney
-                }
-          
-                highscore = players.players[currentPlayerIndex].HighScore
+                } //ZStack
+                .sheet(isPresented: $showLeaderBoard){
+                    LeaderViewBoard()
             }
+            .onAppear{
+                playSound(sound: "drum-music", type: "mp3")
+                loadPlayers()
+                if currentPlayerIndex != -1 {
+                    coins = players.players[currentPlayerIndex].UserMoney
+                    highscore = players.players[currentPlayerIndex].HighScore
+                }
+        }
         }
     }
     

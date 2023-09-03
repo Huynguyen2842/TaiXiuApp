@@ -11,7 +11,7 @@ struct RegisterLoginView: View {
     @Environment(\.dismiss) var dismiss
     @AppStorage("players") private var playerData: Data = Data()
     @StateObject private var players:PlayerModel = PlayerModel()
-    @State private var playerLoggin:Player = Player(id: 0, username: "", password: "", HighScore: 0, UserMoney: 0)
+    @State private var playerLoggin:Player = Player(id: 0, username: "", password: "", HighScore: 0, UserMoney: 0, achievements: [])
     @State private var LoginPassword: String = ""
     @State private var LoginUserName: String = ""
     @State private var RegisterUser: String = ""
@@ -49,7 +49,6 @@ struct RegisterLoginView: View {
                         
                     Button("Login") {
                         autheticateUser(username: LoginUserName, password: LoginPassword)
-                        savePlayers()
                         }
                     .foregroundColor(.white)
                     .frame(width: 300, height: 50)
@@ -138,19 +137,23 @@ struct RegisterLoginView: View {
       
     }
     func autheticateUser(username: String, password: String){
-        players.players.forEach { player in
+        players.players.enumerated().forEach { index, player in
             if (player.username == username && player.password == password) {
                 hasAccount = true
                 playerLoggin = player
-                currentPlayerIndex = players.players.firstIndex(where: { p in
-                    p.id == player.id
-                })!
+                currentPlayerIndex = index
             }
         }
     }
     
     func AddUser(username: String, password: String){
-        let NewPlayer = Player(id: players.players.count + 1, username: username, password: password, HighScore: 0, UserMoney: 0)
+        let existingPlayer = players.players.first(where: { $0.username == username })
+            guard existingPlayer == nil else {
+                print("User already exists")
+                return
+            }
+            
+            let NewPlayer = Player(id: players.players.count + 1, username: username, password: password, HighScore: 0, UserMoney: 100, achievements: [])
             players.players.append(NewPlayer)
             savePlayers()
     }
