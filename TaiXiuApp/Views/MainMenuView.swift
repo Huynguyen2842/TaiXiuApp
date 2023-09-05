@@ -9,6 +9,10 @@ import SwiftUI
 
 struct MainMenuView: View {
     @Binding var currentPlayerIndex: Int
+    @State var gameLevel: Int = 1
+    @State var selectedLevel: Int = 1
+    @State var language: String = ""
+    @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     var body: some View {
         NavigationView {
             ZStack{
@@ -18,7 +22,27 @@ struct MainMenuView: View {
                             .ignoresSafeArea(.all)
                         VStack (spacing: 0) {
                             Spacer()
-                           
+                            
+                            Button(action: {
+                                // Navigate to ContentView
+                            }) {
+                                    NavigationLink(
+                                        destination: RegisterLoginView(language: $language),
+                                        label: {
+                                            ZStack{
+                                                Image(systemName: "arrowshape.backward.fill")
+                                                    .font(.title2)
+                                                    .foregroundColor(.black)
+                                                    .padding(.horizontal, 10)
+                                                    .offset(x: -10)
+                                            }
+                                        }
+
+                                    )
+                        }
+                            .offset(y: -50)
+                            .offset(x: -155)
+                            
                             Image("taixiulogo")
                                 .resizable()
                                 .scaledToFill()
@@ -30,7 +54,7 @@ struct MainMenuView: View {
                                     // Navigate to ContentView
                                 }) {
                                         NavigationLink(
-                                            destination: ContentView(currentPlayerIndex: $currentPlayerIndex),
+                                            destination: ContentView(gameLevel: gameLevel, selectedLevel: selectedLevel, language: language, currentPlayerIndex: $currentPlayerIndex),
                                             label: {
                                                 ZStack{
                                                     Image("playButton 1")
@@ -38,7 +62,7 @@ struct MainMenuView: View {
                                                         .scaledToFill()
                                                         .frame(width: 200, height: 100)
                                                     
-                                                    Text("Start")
+                                                    Text("Start-string")
                                                     .foregroundColor(.black)
                                                     .fontWeight(.bold)
                                                     .font(.title2)
@@ -63,7 +87,7 @@ struct MainMenuView: View {
                                                         .resizable()
                                                         .scaledToFill()
                                                         .frame(width:200, height: 100, alignment: .center)
-                                                    Text("How to Play")
+                                                    Text("How-to-play-string")
                                                     .foregroundColor(.black)
                                                     .fontWeight(.bold)
                                                     .font(.title2)
@@ -82,14 +106,14 @@ struct MainMenuView: View {
                                 }) {
                                         NavigationLink(
                                             // SettingView(selectedLevel: $selectedLevel)
-                                            destination: InfoView(),
+                                            destination: SettingView(gameLevel: $gameLevel, selectedLevel: $selectedLevel, language: $language, currentPlayerIndex: $currentPlayerIndex),
                                             label: {
                                                 ZStack{
                                                     Image("playButton 1")
                                                         .resizable()
                                                         .scaledToFill()
                                                         .frame(width:200, height: 100, alignment: .center)
-                                                    Text("Setting")
+                                                    Text("Setting-string")
                                                     .foregroundColor(.black)
                                                     .fontWeight(.bold)
                                                     .font(.title2)
@@ -107,7 +131,7 @@ struct MainMenuView: View {
                                     // Navigate to InfoView
                                 }) {
                                         NavigationLink(
-                                            destination: LeaderViewBoard(),
+                                            destination: LeaderViewBoard( language: $language),
                                             label: {
                                                 ZStack{
                                                     Image("leaderboard")
@@ -127,9 +151,13 @@ struct MainMenuView: View {
                         }
                     }
                 }
-        
             }
+            .onAppear(perform: {
+                playSound(sound: "mainmenuView", type: "mp3")
+            })
+            .environment(\.locale, Locale.init(identifier: language))
             }
+        .navigationBarBackButtonHidden(true)
         }
     }
 

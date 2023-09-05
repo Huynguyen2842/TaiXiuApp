@@ -1,68 +1,86 @@
-//
-//  SettingView.swift
-//  TaiXiuApp
-//
-//  Created by Nguyen Giang Huy on 03/09/2023.
-//
-
 import SwiftUI
 
 struct SettingView: View {
-    
+    @AppStorage("isDrakMode") private var isDark = false
     @State private var isLoggedIn: Bool = true
     @Binding var gameLevel: Int
     @Binding var selectedLevel: Int
+    @Binding var language: String
     @Binding var currentPlayerIndex: Int
     @AppStorage("players") private var playerData: Data = Data()
-    @StateObject private var players:PlayerModel = PlayerModel()
-    @Environment(\.dismiss) var dismiss
+    @StateObject private var players: PlayerModel = PlayerModel()
+    @Environment(\.presentationMode) var presentationMode
+    
     var body: some View {
         if isLoggedIn {
-            // ... the rest of your SettingView code
-            VStack {
-            Text("Settings")
-                .font(.largeTitle)
-                .fontWeight(.bold)
-                .padding(.bottom, 20)
-                Text("Username: \(currentPlayerIndex >= 0 && currentPlayerIndex < players.players.count ? players.players[currentPlayerIndex].username : "Unknown")")
-                .font(.title2)
-                .padding(.bottom, 20)
-            Picker("Select Level", selection: $selectedLevel) {
-                Text("Easy").tag(1)
-                Text("Medium").tag(2)
-                Text("Hard").tag(3)
-            }.onChange(of: selectedLevel, perform: { _ in
-                print(selectedLevel)
-            })
-            .pickerStyle(SegmentedPickerStyle())
-            Button("Logout") {
-                currentPlayerIndex = -1
-                isLoggedIn = false
-                
+            NavigationView {
+                Form {
+                    Section(header: Text("user-info-string").font(.headline)) {
+                        HStack {
+                            Label("user-string", systemImage: "person.crop.circle")
+                            Text("\(currentPlayerIndex >= 0 && currentPlayerIndex < players.players.count ? players.players[currentPlayerIndex].username : "Unknown")")
+                        }
+                    }
+                    
+                    Section(header: Text("language-string").font(.headline)) {
+                        Picker("Select Language", selection: $language) {
+                            Text("vietnamese-string").tag("vi")
+                            Text("english-string").tag("en")
+                        }
+                        .pickerStyle(SegmentedPickerStyle())
+                    }
+                    
+                    Section(header: Text("level-string").font(.headline)){
+                        Picker("Select Level", selection: $selectedLevel) {
+                            Text("easy-mode-string").tag(1)
+                            Text("medium-mode-string").tag(2)
+                            Text("hard-mode-string").tag(3)
+                        }
+                        .pickerStyle(SegmentedPickerStyle())
+                    }
+                    
+                    Section {
+                        Button(action: {
+                            currentPlayerIndex = -1
+                            isLoggedIn = false
+                        }) {
+                            Text("log-out-string")
+                                .foregroundColor(.red)
+                        }
+                    }
+                }
+                .navigationBarTitle("setting-string", displayMode: .inline)
+                .toolbar {
+                    ToolbarItem(placement: .navigationBarTrailing) {
+                        Button(action: {
+                            isDark.toggle()
+                        }) {
+                            isDark ? Label("Dark", systemImage: "sun.max.fill") : Label("Dark", systemImage: "moon.fill")
+                        }
+                    }
+                    ToolbarItem(placement: .navigationBarLeading) {
+                        Button(action: {
+                            presentationMode.wrappedValue.dismiss()
+                        }) {
+                            Label("close-string", systemImage: "xmark.circle.fill")
+                        }
+                    }
+                }
             }
-                .padding()
-                .foregroundColor(.white)
-                .background(Color.red)
-                .cornerRadius(8)
-                .padding(.top, 20)
-            Button("Close") {
-                dismiss()
-            }
-            .padding(.top, 20)
-            }.onAppear(){
+            .onAppear{
                 loadPlayers()
             }
-            .padding()
+            .navigationBarHidden(true)
+            .environment(\.locale, Locale.init(identifier: language))
+            .environment(\.colorScheme, isDark ? .dark : .light)
         } else {
-            // Redirect to the RegisterLoginView or some other view
-            RegisterLoginView()
+            RegisterLoginView(language: $language)
                 .navigationBarBackButtonHidden(true)
-            }
-        
+        }
     }
     
     func loadPlayers() {
-        do{
+        do {
             let decodedPlayers = try JSONDecoder().decode([Player].self, from: playerData)
             players.players = decodedPlayers
         } catch {
@@ -73,6 +91,6 @@ struct SettingView: View {
 
 struct SettingView_Previews: PreviewProvider {
     static var previews: some View {
-        SettingView(gameLevel: .constant(1), selectedLevel: .constant(1), currentPlayerIndex: .constant(-1))
+        SettingView(gameLevel: .constant(1), selectedLevel: .constant(1), language: .constant("vi"), currentPlayerIndex: .constant(-1))
     }
 }

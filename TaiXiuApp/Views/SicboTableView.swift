@@ -8,13 +8,19 @@
 import SwiftUI
 
 struct SicboTableView: View {
+    @AppStorage("players") private var playerData: Data = Data()
+    @ObservedObject var players:PlayerModel
     @ObservedObject var userHandler: UserHandler
+    @Binding var language: String
+    @Binding var currentPlayerIndex: Int
     var body: some View {
         ZStack{
             VStack{
                 HStack{
                     Button {
                         userHandler.chooseBetSmall()
+                        players.players[currentPlayerIndex].isBetSmall = userHandler.isBetSmall
+                        savePlayers()
                     } label: {
                         Rectangle()
                             .fill(Color("DarkGreen"))
@@ -23,7 +29,7 @@ struct SicboTableView: View {
                             .overlay(
                                 ZStack{
                                     VStack{
-                                        Text("Small").foregroundColor(.white)
+                                        Text("small-string").foregroundColor(.white)
                                         .font(.system(size: 20))
                                         .bold()
                                         .modifier(ScoreLabelModifiers())
@@ -42,6 +48,8 @@ struct SicboTableView: View {
 
                     Button {
                         userHandler.chooseBetBig()
+                        players.players[currentPlayerIndex].isBetBig = userHandler.isBetBig
+                        savePlayers()
                     } label: {
                         Rectangle()
                             .fill(Color("DarkGreen"))
@@ -50,7 +58,7 @@ struct SicboTableView: View {
                             .overlay(
                                 ZStack {
                                     VStack{
-                                        Text("Big").foregroundColor(.white)
+                                        Text("big-string").foregroundColor(.white)
                                         .font(.system(size: 20))
                                         .bold()
                                         .modifier(ScoreLabelModifiers())
@@ -69,6 +77,8 @@ struct SicboTableView: View {
                     
                     Button {
                         userHandler.chooseBetAnyTriple()
+                        players.players[currentPlayerIndex].isBetAnyTriple = userHandler.isBetAnyTriple
+                        savePlayers()
                     } label: {
                         Rectangle()
                             .fill(Color("DarkGreen"))
@@ -77,7 +87,7 @@ struct SicboTableView: View {
                             .overlay(
                                 ZStack {
                                     VStack{
-                                        Text("Any Triple").foregroundColor(.white)
+                                        Text("Any-Triple-string").foregroundColor(.white)
                                         .font(.system(size: 20))
                                         .bold()
                                         .modifier(ScoreLabelModifiers())
@@ -92,6 +102,8 @@ struct SicboTableView: View {
                     
                     Button {
                         userHandler.chooseBetOdd()
+                        players.players[currentPlayerIndex].isBetOdd = userHandler.isBetOdd
+                        savePlayers()
                     } label: {
                         Rectangle()
                             .fill(Color("DarkGreen"))
@@ -100,7 +112,7 @@ struct SicboTableView: View {
                             .overlay(
                                 ZStack {
                                     VStack{
-                                        Text("ODD").foregroundColor(.white)
+                                        Text("Odd-string").foregroundColor(.white)
                                         .font(.system(size: 20))
                                         .bold()
                                         .modifier(ScoreLabelModifiers())
@@ -115,6 +127,8 @@ struct SicboTableView: View {
                     
                     Button {
                         userHandler.chooseBetEven()
+                        players.players[currentPlayerIndex].isBetEven = userHandler.isBetEven
+                        savePlayers()
                     } label: {
                         Rectangle()
                             .fill(Color("DarkGreen"))
@@ -123,7 +137,7 @@ struct SicboTableView: View {
                             .overlay(
                                 ZStack {
                                     VStack{
-                                        Text("EVEN").foregroundColor(.white)
+                                        Text("Even-string").foregroundColor(.white)
                                         .font(.system(size: 20))
                                         .bold()
                                         .modifier(ScoreLabelModifiers())
@@ -149,6 +163,8 @@ struct SicboTableView: View {
                     
                     Button {
                         userHandler.chooseBetOne()
+                        players.players[currentPlayerIndex].isBetOne = userHandler.isBetOne
+                        savePlayers()
                     } label: {
                         Rectangle()
                             .fill(Color("DarkGreen"))
@@ -171,6 +187,8 @@ struct SicboTableView: View {
                     
                     Button {
                         userHandler.chooseBetTwo()
+                        players.players[currentPlayerIndex].isBetTwo = userHandler.isBetTwo
+                        savePlayers()
                     } label: {
                         Rectangle()
                             .fill(Color("DarkGreen"))
@@ -193,6 +211,8 @@ struct SicboTableView: View {
                     
                     Button {
                         userHandler.chooseBetThree()
+                        players.players[currentPlayerIndex].isBetThree = userHandler.isBetThree
+                        savePlayers()
                     } label: {
                         Rectangle()
                             .fill(Color("DarkGreen"))
@@ -215,6 +235,8 @@ struct SicboTableView: View {
                     
                     Button {
                         userHandler.chooseBetFour()
+                        players.players[currentPlayerIndex].isBetFour = userHandler.isBetFour
+                        savePlayers()
                     } label: {
                         Rectangle()
                             .fill(Color("DarkGreen"))
@@ -237,6 +259,8 @@ struct SicboTableView: View {
                     
                     Button {
                         userHandler.chooseBetFive()
+                        players.players[currentPlayerIndex].isBetFive = userHandler.isBetFive
+                        savePlayers()
                     } label: {
                         Rectangle()
                             .fill(Color("DarkGreen"))
@@ -259,6 +283,8 @@ struct SicboTableView: View {
                     
                     Button {
                         userHandler.chooseBetSix()
+                        players.players[currentPlayerIndex].isBetSix = userHandler.isBetSix
+                        savePlayers()
                     } label: {
                         Rectangle()
                             .fill(Color("DarkGreen"))
@@ -284,6 +310,8 @@ struct SicboTableView: View {
                 HStack {
                     Button {
                         userHandler.chooseBetDoubleOne()
+                        players.players[currentPlayerIndex].isBetDoubleOne = userHandler.isBetDoubleOne
+                        savePlayers()
                     } label: {
                         Rectangle()
                             .fill(Color("DarkGreen"))
@@ -309,6 +337,8 @@ struct SicboTableView: View {
                     
                     Button {
                         userHandler.chooseBetDoubleTwo()
+                        players.players[currentPlayerIndex].isBetDoubleTwo = userHandler.isBetDoubleTwo
+                        savePlayers()
                     } label: {
                         Rectangle()
                             .fill(Color("DarkGreen"))
@@ -334,6 +364,8 @@ struct SicboTableView: View {
                     
                     Button {
                         userHandler.chooseBetDoubleThree()
+                        players.players[currentPlayerIndex].isBetDoubleThree = userHandler.isBetDoubleThree
+                        savePlayers()
                     } label: {
                         Rectangle()
                             .fill(Color("DarkGreen"))
@@ -359,6 +391,8 @@ struct SicboTableView: View {
                     
                     Button {
                         userHandler.chooseBetDoubleFour()
+                        players.players[currentPlayerIndex].isBetDoubleFour = userHandler.isBetDoubleFour
+                        savePlayers()
                     } label: {
                         Rectangle()
                             .fill(Color("DarkGreen"))
@@ -384,6 +418,8 @@ struct SicboTableView: View {
                     
                     Button {
                         userHandler.chooseBetDoubleFive()
+                        players.players[currentPlayerIndex].isBetDoubleFive = userHandler.isBetDoubleFive
+                        savePlayers()
                     } label: {
                         Rectangle()
                             .fill(Color("DarkGreen"))
@@ -409,6 +445,8 @@ struct SicboTableView: View {
                     
                     Button {
                         userHandler.chooseBetDoubleSix()
+                        players.players[currentPlayerIndex].isBetDoubleSix = userHandler.isBetDoubleSix
+                        savePlayers()
                     } label: {
                         Rectangle()
                             .fill(Color("DarkGreen"))
@@ -435,6 +473,8 @@ struct SicboTableView: View {
                 HStack {
                     Button {
                         userHandler.chooseBetOneTwo()
+                        players.players[currentPlayerIndex].isBetOneTwo = userHandler.isBetOneTwo
+                        savePlayers()
                     } label: {
                         Rectangle()
                             .fill(Color("DarkGreen"))
@@ -460,6 +500,8 @@ struct SicboTableView: View {
                     
                     Button {
                         userHandler.chooseBetOneThree()
+                        players.players[currentPlayerIndex].isBetOneThree = userHandler.isBetOneThree
+                        savePlayers()
                     } label: {
                         Rectangle()
                             .fill(Color("DarkGreen"))
@@ -485,6 +527,8 @@ struct SicboTableView: View {
                     
                     Button {
                         userHandler.chooseBetOneFour()
+                        players.players[currentPlayerIndex].isBetOneFour = userHandler.isBetOneFour
+                        savePlayers()
                     } label: {
                         Rectangle()
                             .fill(Color("DarkGreen"))
@@ -510,6 +554,8 @@ struct SicboTableView: View {
                     
                     Button {
                         userHandler.chooseBetOneFive()
+                        players.players[currentPlayerIndex].isBetOneFive = userHandler.isBetOneFive
+                        savePlayers()
                     } label: {
                         Rectangle()
                             .fill(Color("DarkGreen"))
@@ -535,6 +581,8 @@ struct SicboTableView: View {
                     
                     Button {
                         userHandler.chooseBetOneSix()
+                        players.players[currentPlayerIndex].isBetOneSix = userHandler.isBetOneSix
+                        savePlayers()
                     } label: {
                         Rectangle()
                             .fill(Color("DarkGreen"))
@@ -560,6 +608,8 @@ struct SicboTableView: View {
                     
                     Button {
                         userHandler.chooseBetTwoThree()
+                        players.players[currentPlayerIndex].isBetTwoThree = userHandler.isBetTwoThree
+                        savePlayers()
                     } label: {
                         Rectangle()
                             .fill(Color("DarkGreen"))
@@ -586,6 +636,8 @@ struct SicboTableView: View {
                 HStack {
                     Button {
                         userHandler.chooseBetTwoFour()
+                        players.players[currentPlayerIndex].isBetTwoFour = userHandler.isBetTwoFour
+                        savePlayers()
                     } label: {
                         Rectangle()
                             .fill(Color("DarkGreen"))
@@ -611,6 +663,8 @@ struct SicboTableView: View {
                     
                     Button {
                         userHandler.chooseBetTwoFive()
+                        players.players[currentPlayerIndex].isBetTwoFive = userHandler.isBetTwoFive
+                        savePlayers()
                     } label: {
                         Rectangle()
                             .fill(Color("DarkGreen"))
@@ -635,6 +689,8 @@ struct SicboTableView: View {
                     }
                     Button {
                         userHandler.chooseBetTwoSix()
+                        players.players[currentPlayerIndex].isBetTwoSix = userHandler.isBetTwoSix
+                        savePlayers()
                     } label: {
                         Rectangle()
                             .fill(Color("DarkGreen"))
@@ -660,6 +716,8 @@ struct SicboTableView: View {
                     
                     Button {
                         userHandler.chooseBetThreeFour()
+                        players.players[currentPlayerIndex].isBetThreeFour = userHandler.isBetThreeFour
+                        savePlayers()
                     } label: {
                         Rectangle()
                             .fill(Color("DarkGreen"))
@@ -685,6 +743,8 @@ struct SicboTableView: View {
                     
                     Button {
                         userHandler.chooseBetThreeFive()
+                        players.players[currentPlayerIndex].isBetThreeFive = userHandler.isBetThreeFive
+                        savePlayers()
                     } label: {
                         Rectangle()
                             .fill(Color("DarkGreen"))
@@ -710,6 +770,8 @@ struct SicboTableView: View {
                     
                     Button {
                         userHandler.chooseBetThreeSix()
+                        players.players[currentPlayerIndex].isBetThreeSix = userHandler.isBetThreeSix
+                        savePlayers()
                     } label: {
                         Rectangle()
                             .fill(Color("DarkGreen"))
@@ -736,6 +798,8 @@ struct SicboTableView: View {
                 HStack{
                     Button {
                         userHandler.chooseBetFourFive()
+                        players.players[currentPlayerIndex].isBetFourFive = userHandler.isBetFourFive
+                        savePlayers()
                     } label: {
                         Rectangle()
                             .fill(Color("DarkGreen"))
@@ -761,6 +825,8 @@ struct SicboTableView: View {
                     
                     Button {
                         userHandler.chooseBetFourSix()
+                        players.players[currentPlayerIndex].isBetFourSix = userHandler.isBetFourSix
+                        savePlayers()
                     } label: {
                         Rectangle()
                             .fill(Color("DarkGreen"))
@@ -786,6 +852,8 @@ struct SicboTableView: View {
                     
                     Button {
                         userHandler.chooseBetFiveSix()
+                        players.players[currentPlayerIndex].isBetFiveSix = userHandler.isBetFiveSix
+                        savePlayers()
                     } label: {
                         Rectangle()
                             .fill(Color("DarkGreen"))
@@ -816,11 +884,21 @@ struct SicboTableView: View {
 //                Text("Tai".uppercased())
 //                .modifier(TableLabelModifiers())
         }
+        .environment(\.locale, Locale.init(identifier: language))
+    }
+    
+    func savePlayers() {
+        do{
+            let encodedPlayers = try JSONEncoder().encode(players.players)
+            playerData = encodedPlayers
+        } catch {
+            print("Error Saving players: ")
+        }
     }
 }
 
 struct SicboTableView_Previews: PreviewProvider {
     static var previews: some View {
-        SicboTableView(userHandler: UserHandler())
+        SicboTableView(players: PlayerModel(), userHandler: UserHandler(), language: .constant("en"), currentPlayerIndex: .constant(-1))
     }
 }

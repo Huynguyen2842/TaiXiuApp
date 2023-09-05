@@ -12,15 +12,24 @@ struct ContentView: View {
     @StateObject private var players:PlayerModel = PlayerModel()
     @State var gameLevel: Int = 1
     @State var selectedLevel: Int = 1
+    @State var language: String = ""
     @State var AchivementPlayerIndex: Int = -1
     // MARK: - PROPERTIES
     let icons = ["dice1","dice2","dice3","dice4","dice5","dice6"]
 //    let icons = ["apple","bar","bell"]
     @EnvironmentObject var userProgress: UserHandler
     @StateObject var userHandler = UserHandler()
+    @Environment(\.presentationMode) var presentationMode
     @State var BetRatios: Int = 1
+    @State var Win: Int = 0
+    @State var WinStreak: Int = 0
+    @State var HighestStreak: Int = 0
+    @State var FirstWin: Int = 0
+    @State var Lose: Int = 0
+    @State var win_percentage: Float = 0
+    @State var Battle_Num: Int = 0
     @State var reels = [0,1,2]
-    @State var coins = 500
+    @State var coins = 300
     @State var betAmount = 10
     @State var highscore = 0
     @State var isChooseBet10 = true
@@ -51,6 +60,7 @@ struct ContentView: View {
         }
         print(BetRatios)
     }
+ 
     // MARK: - LOGIC SPIN REELS
     func spinReels(){
 //        reels[0] = Int.random(in: 0...icons.count-1)
@@ -70,13 +80,20 @@ struct ContentView: View {
         NumReel1 = reels[1] + 1
         NumReel2 = reels[2] + 1
         sum3Reel = NumReel0 + NumReel1 + NumReel2
-        
+        //
+//        if (isFirstWin){
+//            let newAchievement1 = Achievement(name: "First Win", image: "firstwin")
+//            addAchievementToPlayer(player: &players.players[currentPlayerIndex], achievement: newAchievement1)
+//        }
         
         //MARK: - CHECK IF USER CHOOSES ANY TRIPLE
         if (userHandler.isBetAnyTriple == true){
+            if currentPlayerIndex != -1 {
+                players.players[currentPlayerIndex].isBetAnyTriple = userHandler.isBetAnyTriple
+            }
             if (NumReel0 == NumReel1 && NumReel1 == NumReel2 && NumReel2 == NumReel0){
                 //WINING LOGIC
-                PlayerWins()
+                PlayerWinTriple()
                 if coins > highscore {
                     newHighScore()
                 } else {
@@ -89,18 +106,13 @@ struct ContentView: View {
             // newAchievement = Achievement (name, image)
             // .achivements.append(newAchievement)
             //
-            let newAchievement = Achievement(name: "Win Triple", image: "champion")
-            addAchievementToPlayer(player: &players.players[currentPlayerIndex], achievement: newAchievement)
-
-        }
-            
-        func addAchievementToPlayer(player: inout Player, achievement: Achievement) {
-            // Check if the player's achievements array already contains an achievement with the given name
-            if !player.achievements.contains(where: { $0.name == achievement.name }) {
-                // If it doesn't contain the achievement, then add it
-                player.achievements.append(achievement)
-            } else {
-                print("Achievement \(achievement.name) already exists for player \(player.username). Not adding again.")
+            if currentPlayerIndex >= 0 && currentPlayerIndex < players.players.count {
+                let newAchievement = Achievement(name: "Win Triple", image: "champion")
+                addAchievementToPlayer(player: &players.players[currentPlayerIndex], achievement: newAchievement)
+            }
+        } else {
+            if currentPlayerIndex != -1 {
+                players.players[currentPlayerIndex].isBetAnyTriple = false
             }
         }
         
@@ -247,7 +259,7 @@ struct ContentView: View {
         //MARK: - CHECK IF USER BETS DOUBLE ONE
         if (userHandler.isBetDoubleOne == true) {
             if ((NumReel0 == 1 && NumReel1 == 1) || (NumReel0 == 1 && NumReel2 == 1) || (NumReel1 == 1 && NumReel2 == 1)){
-                PlayerWins()
+                PlayerWinDouble()
                 if coins > highscore {
                     newHighScore()
                 } else {
@@ -261,7 +273,7 @@ struct ContentView: View {
         //MARK: - CHECK IF USER BETS DOUBLE TWO
         if (userHandler.isBetDoubleTwo == true) {
             if ((NumReel0 == 2 && NumReel1 == 2) || (NumReel0 == 2 && NumReel2 == 2) || (NumReel1 == 2 && NumReel2 == 2)){
-                PlayerWins()
+                PlayerWinDouble()
                 if coins > highscore {
                     newHighScore()
                 } else {
@@ -275,7 +287,7 @@ struct ContentView: View {
         //MARK: - CHECK IF USER BETS DOUBLE THREE
         if (userHandler.isBetDoubleThree == true) {
             if ((NumReel0 == 3 && NumReel1 == 3) || (NumReel0 == 3 && NumReel2 == 3) || (NumReel1 == 3 && NumReel2 == 3)){
-                PlayerWins()
+                PlayerWinDouble()
                 if coins > highscore {
                     newHighScore()
                 } else {
@@ -289,7 +301,7 @@ struct ContentView: View {
         //MARK: - CHECK IF USER BETS DOUBLE FOUR
         if (userHandler.isBetDoubleFour == true) {
             if ((NumReel0 == 4 && NumReel1 == 4) || (NumReel0 == 4 && NumReel2 == 4) || (NumReel1 == 4 && NumReel2 == 4)){
-                PlayerWins()
+                PlayerWinDouble()
                 if coins > highscore {
                     newHighScore()
                 } else {
@@ -303,7 +315,7 @@ struct ContentView: View {
         //MARK: - CHECK IF USER BETS DOUBLE FIVE
         if (userHandler.isBetDoubleFive == true) {
             if ((NumReel0 == 5 && NumReel1 == 5) || (NumReel0 == 5 && NumReel2 == 5) || (NumReel1 == 5 && NumReel2 == 5)){
-                PlayerWins()
+                PlayerWinDouble()
                 if coins > highscore {
                     newHighScore()
                 } else {
@@ -317,7 +329,7 @@ struct ContentView: View {
         //MARK: - CHECK IF USER BETS DOUBLE SIX
         if (userHandler.isBetDoubleSix == true) {
             if ((NumReel0 == 6 && NumReel1 == 6) || (NumReel0 == 6 && NumReel2 == 6) || (NumReel1 == 6 && NumReel2 == 6)){
-                PlayerWins()
+                PlayerWinDouble()
                 if coins > highscore {
                     newHighScore()
                 } else {
@@ -332,7 +344,7 @@ struct ContentView: View {
         if (userHandler.isBetOneTwo == true) {
             if ((NumReel0 == 1 && NumReel1 == 2) || (NumReel0 == 2 && NumReel1 == 1)
                 || (NumReel0 == 1 && NumReel2 == 2) || (NumReel0 == 2 && NumReel2 == 1) || (NumReel1 == 1 && NumReel2 == 2) || (NumReel1 == 2 && NumReel2 == 1)){
-                PlayerWins()
+                PlayerWinDouble()
                 if coins > highscore {
                     newHighScore()
                 } else {
@@ -347,7 +359,7 @@ struct ContentView: View {
         if (userHandler.isBetOneThree == true) {
             if ((NumReel0 == 1 && NumReel1 == 3) || (NumReel0 == 3 && NumReel1 == 1)
                 || (NumReel0 == 1 && NumReel2 == 3) || (NumReel0 == 3 && NumReel2 == 1) || (NumReel1 == 1 && NumReel2 == 3) || (NumReel1 == 3 && NumReel2 == 1)){
-                PlayerWins()
+                PlayerWinDouble()
                 if coins > highscore {
                     newHighScore()
                 } else {
@@ -362,7 +374,7 @@ struct ContentView: View {
         if (userHandler.isBetOneFour == true) {
             if ((NumReel0 == 1 && NumReel1 == 4) || (NumReel0 == 4 && NumReel1 == 1)
                 || (NumReel0 == 1 && NumReel2 == 4) || (NumReel0 == 4 && NumReel2 == 1) || (NumReel1 == 1 && NumReel2 == 4) || (NumReel1 == 4 && NumReel2 == 1)){
-                PlayerWins()
+                PlayerWinDouble()
                 if coins > highscore {
                     newHighScore()
                 } else {
@@ -377,7 +389,7 @@ struct ContentView: View {
         if (userHandler.isBetOneFive == true) {
             if ((NumReel0 == 1 && NumReel1 == 5) || (NumReel0 == 5 && NumReel1 == 1)
                 || (NumReel0 == 1 && NumReel2 == 5) || (NumReel0 == 5 && NumReel2 == 1) || (NumReel1 == 1 && NumReel2 == 5) || (NumReel1 == 5 && NumReel2 == 1)){
-                PlayerWins()
+                PlayerWinDouble()
                 if coins > highscore {
                     newHighScore()
                 } else {
@@ -392,7 +404,7 @@ struct ContentView: View {
         if (userHandler.isBetOneSix == true) {
             if ((NumReel0 == 1 && NumReel1 == 6) || (NumReel0 == 6 && NumReel1 == 1)
                 || (NumReel0 == 1 && NumReel2 == 6) || (NumReel0 == 6 && NumReel2 == 1) || (NumReel1 == 1 && NumReel2 == 6) || (NumReel1 == 6 && NumReel2 == 1)){
-                PlayerWins()
+                PlayerWinDouble()
                 if coins > highscore {
                     newHighScore()
                 } else {
@@ -407,7 +419,7 @@ struct ContentView: View {
         if (userHandler.isBetTwoThree == true) {
             if ((NumReel0 == 2 && NumReel1 == 3) || (NumReel0 == 3 && NumReel1 == 2)
                 || (NumReel0 == 2 && NumReel2 == 3) || (NumReel0 == 3 && NumReel2 == 2) || (NumReel1 == 2 && NumReel2 == 3) || (NumReel1 == 3 && NumReel2 == 2)){
-                PlayerWins()
+                PlayerWinDouble()
                 if coins > highscore {
                     newHighScore()
                 } else {
@@ -422,7 +434,7 @@ struct ContentView: View {
         if (userHandler.isBetTwoFour == true) {
             if ((NumReel0 == 2 && NumReel1 == 4) || (NumReel0 == 4 && NumReel1 == 2)
                 || (NumReel0 == 2 && NumReel2 == 4) || (NumReel0 == 4 && NumReel2 == 2) || (NumReel1 == 2 && NumReel2 == 4) || (NumReel1 == 4 && NumReel2 == 2)){
-                PlayerWins()
+                PlayerWinDouble()
                 if coins > highscore {
                     newHighScore()
                 } else {
@@ -437,7 +449,7 @@ struct ContentView: View {
         if (userHandler.isBetTwoFive == true) {
             if ((NumReel0 == 2 && NumReel1 == 5) || (NumReel0 == 5 && NumReel1 == 2)
                 || (NumReel0 == 2 && NumReel2 == 5) || (NumReel0 == 5 && NumReel2 == 2) || (NumReel1 == 2 && NumReel2 == 5) || (NumReel1 == 5 && NumReel2 == 2)){
-                PlayerWins()
+                PlayerWinDouble()
                 if coins > highscore {
                     newHighScore()
                 } else {
@@ -452,7 +464,7 @@ struct ContentView: View {
         if (userHandler.isBetTwoSix == true) {
             if ((NumReel0 == 2 && NumReel1 == 6) || (NumReel0 == 6 && NumReel1 == 2)
                 || (NumReel0 == 2 && NumReel2 == 6) || (NumReel0 == 6 && NumReel2 == 2) || (NumReel1 == 2 && NumReel2 == 6) || (NumReel1 == 6 && NumReel2 == 2)){
-                PlayerWins()
+                PlayerWinDouble()
                 if coins > highscore {
                     newHighScore()
                 } else {
@@ -467,7 +479,7 @@ struct ContentView: View {
         if (userHandler.isBetThreeFour == true) {
             if ((NumReel0 == 3 && NumReel1 == 4) || (NumReel0 == 4 && NumReel1 == 3)
                 || (NumReel0 == 3 && NumReel2 == 4) || (NumReel0 == 4 && NumReel2 == 3) || (NumReel1 == 3 && NumReel2 == 4) || (NumReel1 == 4 && NumReel2 == 3)){
-                PlayerWins()
+                PlayerWinDouble()
                 if coins > highscore {
                     newHighScore()
                 } else {
@@ -482,7 +494,7 @@ struct ContentView: View {
         if (userHandler.isBetThreeFive == true) {
             if ((NumReel0 == 3 && NumReel1 == 5) || (NumReel0 == 5 && NumReel1 == 3)
                 || (NumReel0 == 3 && NumReel2 == 5) || (NumReel0 == 5 && NumReel2 == 3) || (NumReel1 == 3 && NumReel2 == 5) || (NumReel1 == 5 && NumReel2 == 3)){
-                PlayerWins()
+                PlayerWinDouble()
                 if coins > highscore {
                     newHighScore()
                 } else {
@@ -497,7 +509,7 @@ struct ContentView: View {
         if (userHandler.isBetThreeSix == true) {
             if ((NumReel0 == 3 && NumReel1 == 6) || (NumReel0 == 6 && NumReel1 == 3)
                 || (NumReel0 == 3 && NumReel2 == 6) || (NumReel0 == 6 && NumReel2 == 3) || (NumReel1 == 3 && NumReel2 == 6) || (NumReel1 == 6 && NumReel2 == 3)){
-                PlayerWins()
+                PlayerWinDouble()
                 if coins > highscore {
                     newHighScore()
                 } else {
@@ -512,7 +524,7 @@ struct ContentView: View {
         if (userHandler.isBetFourFive == true) {
             if ((NumReel0 == 4 && NumReel1 == 5) || (NumReel0 == 5 && NumReel1 == 4)
                 || (NumReel0 == 4 && NumReel2 == 5) || (NumReel0 == 5 && NumReel2 == 4) || (NumReel1 == 4 && NumReel2 == 5) || (NumReel1 == 5 && NumReel2 == 4)){
-                PlayerWins()
+                PlayerWinDouble()
                 if coins > highscore {
                     newHighScore()
                 } else {
@@ -527,7 +539,7 @@ struct ContentView: View {
         if (userHandler.isBetFourSix == true) {
             if ((NumReel0 == 4 && NumReel1 == 6) || (NumReel0 == 6 && NumReel1 == 4)
                 || (NumReel0 == 4 && NumReel2 == 6) || (NumReel0 == 6 && NumReel2 == 4) || (NumReel1 == 4 && NumReel2 == 6) || (NumReel1 == 6 && NumReel2 == 4)){
-                PlayerWins()
+                PlayerWinDouble()
                 if coins > highscore {
                     newHighScore()
                 } else {
@@ -542,7 +554,7 @@ struct ContentView: View {
         if (userHandler.isBetFiveSix == true) {
             if ((NumReel0 == 5 && NumReel1 == 6) || (NumReel0 == 6 && NumReel1 == 5)
                 || (NumReel0 == 5 && NumReel2 == 6) || (NumReel0 == 6 && NumReel2 == 5) || (NumReel1 == 5 && NumReel2 == 6) || (NumReel1 == 6 && NumReel2 == 5)){
-                PlayerWins()
+                PlayerWinDouble()
                 if coins > highscore {
                     newHighScore()
                 } else {
@@ -554,11 +566,76 @@ struct ContentView: View {
         }
     }
     
+    func getWinningStreak(){
+        if (HighestStreak >= 3)
+        {
+            let newAchievement = Achievement(name: "Got 3 winning streak", image: "lucky")
+            addAchievementToPlayer(player: &players.players[currentPlayerIndex], achievement: newAchievement)
+        }
+    }
+    
+    func getHighScoreBadge(){
+        if (highscore == 400){
+            if currentPlayerIndex >= 0 && currentPlayerIndex < players.players.count {
+                let newAchievement = Achievement(name: "Reach 400 coins", image: "Money")
+                addAchievementToPlayer(player: &players.players[currentPlayerIndex], achievement: newAchievement)
+            }
+        }
+    }
+    
+    func addAchievementToPlayer(player: inout Player, achievement: Achievement) {
+        // Check if the player's achievements array already contains an achievement with the given name
+        if !player.achievements.contains(where: { $0.name == achievement.name }) {
+            // If it doesn't contain the achievement, then add it
+            player.achievements.append(achievement)
+        } else {
+            print("Achievement \(achievement.name) already exists for player \(player.username). Not adding again.")
+        }
+    }
+    func CheckFirstWin(){
+        if (FirstWin == 1){
+            let newAchievement1 = Achievement(name: "First Win", image: "firstwin")
+          addAchievementToPlayer(player: &players.players[currentPlayerIndex], achievement: newAchievement1)
+        }
+    }
+    
     // MARK: - PLAYER WINING LOGIC
     func PlayerWins(){
-        coins += betAmount*BetRatios
+        WinStreak += 1
+        FirstWin += 1
+        Win += 1
+        if WinStreak > HighestStreak {
+            HighestStreak = WinStreak
+        }
+        coins += betAmount
 //        players.players[currentPlayerIndex].UserMoney = coins
     }
+    
+    
+    // MARK: - PLAYER WINING DOUBLE LOGIC
+    func PlayerWinDouble(){
+        WinStreak += 1
+        FirstWin += 1
+        Win += 1
+        if WinStreak > HighestStreak {
+            HighestStreak = WinStreak
+        }
+        coins += betAmount*3
+//        players.players[currentPlayerIndex].UserMoney = coins
+    }
+//
+    // MARK: - PLAYER WINING TRIPLE LOGIC
+    func PlayerWinTriple(){
+        WinStreak += 1
+        FirstWin += 1
+        Win += 1
+        if WinStreak > HighestStreak {
+            HighestStreak = WinStreak
+        }
+        coins += betAmount*10
+//        players.players[currentPlayerIndex].UserMoney = coins
+    }
+    
     // MARK: - HIGHSCCORE LOGIC
     func newHighScore(){
         highscore = coins
@@ -567,6 +644,8 @@ struct ContentView: View {
     }
     // MARK: - PLAYER LOSING LOGIC
     func PlayerLoses(){
+        WinStreak = 0
+        Lose += 1
         coins -= betAmount*BetRatios
     }
     // MARK: - BET 20 LOGIC
@@ -588,19 +667,23 @@ struct ContentView: View {
         if (coins <= 0){
             coins = 0
             showGameOverMessage = true
+            Battle_Num += 1
             playSound(sound: "gameover", type: "mp3")
         }
     }
     // MARK: - RESET GAME LOGIC
     func resetGame(){
+        win_percentage = 0
+        Battle_Num = 0
         highscore = 0
-        coins = 100
+        coins = 300
         ChooseBet10()
         playSound(sound: "ring-up", type: "mp3")
     }
+
     
     var body: some View {
-        NavigationView {
+        NavigationStack {
             ZStack{
                 // MARK: - BACKGROUND
                 
@@ -613,6 +696,12 @@ struct ContentView: View {
                     HStack{
                         Button {
                             self.resetGame()
+                            if currentPlayerIndex >= 0 && currentPlayerIndex < players.players.count {
+                                players.players[currentPlayerIndex].UserMoney = coins
+                                players.players[currentPlayerIndex].HighScore = highscore
+                                players.players[currentPlayerIndex].WinPercentage = win_percentage
+                            }
+                            savePlayers()
                         } label: {
                             Image(systemName: "arrow.2.circlepath.circle")
                                 .font(.title2)
@@ -623,56 +712,135 @@ struct ContentView: View {
                         
                         Spacer()
                         
+                        //MARK: - Setting Button
                         Button(action: {
                             // Navigate to ContentView
                         }) {
-                                NavigationLink(
-                                    destination: SettingView(gameLevel: $gameLevel, selectedLevel: $selectedLevel, currentPlayerIndex: $currentPlayerIndex),
-                                    label: {
-                                        Image(systemName: "gearshape")
-                                            .font(.title2)
-                                            .foregroundColor(.white)
-                                            .padding(.horizontal, 10)
-                                            .offset(x: -10)
-                                    }
+                            NavigationLink(
+                                destination: SettingView(gameLevel: $gameLevel, selectedLevel: $selectedLevel, language: $language, currentPlayerIndex: $currentPlayerIndex),
+                                label: {
+                                    Image(systemName: "gearshape")
+                                        .font(.title2)
+                                        .foregroundColor(.white)
+                                        .padding(.horizontal, 10)
+                                        .offset(x: -10)
+                                }
 
-                                )
+                            )
+                        }
                     }
+                    .offset(y: 160)
+                    
+                    Button(action: {
+                        if currentPlayerIndex >= 0 && currentPlayerIndex < players.players.count {
+                            players.players[currentPlayerIndex].isBetAnyTriple = userHandler.isBetAnyTriple
+                            highscore = players.players[currentPlayerIndex].HighScore
+                            userHandler.isBetOdd = players.players[currentPlayerIndex].isBetOdd
+                            userHandler.isBetEven = players.players[currentPlayerIndex].isBetEven
+                            userHandler.isBetSmall = players.players[currentPlayerIndex].isBetSmall
+                            userHandler.isBetBig = players.players[currentPlayerIndex].isBetBig
+                            userHandler.isBetOne = players.players[currentPlayerIndex].isBetOne
+                            userHandler.isBetTwo = players.players[currentPlayerIndex].isBetTwo
+                            userHandler.isBetThree = players.players[currentPlayerIndex].isBetThree
+                            userHandler.isBetFour = players.players[currentPlayerIndex].isBetFour
+                            userHandler.isBetFive = players.players[currentPlayerIndex].isBetFive
+                            userHandler.isBetSix = players.players[currentPlayerIndex].isBetSix
+                            userHandler.isBetDoubleOne = players.players[currentPlayerIndex].isBetDoubleOne
+                            userHandler.isBetDoubleTwo = players.players[currentPlayerIndex].isBetDoubleTwo
+                            userHandler.isBetDoubleThree = players.players[currentPlayerIndex].isBetDoubleThree
+                            userHandler.isBetDoubleFour = players.players[currentPlayerIndex].isBetDoubleFour
+                            userHandler.isBetDoubleFive = players.players[currentPlayerIndex].isBetDoubleFive
+                            userHandler.isBetDoubleSix = players.players[currentPlayerIndex].isBetDoubleSix
+                            userHandler.isBetOneTwo = players.players[currentPlayerIndex].isBetOneTwo
+                            userHandler.isBetOneThree = players.players[currentPlayerIndex].isBetOneThree
+                            userHandler.isBetOneFour = players.players[currentPlayerIndex].isBetOneFour
+                            userHandler.isBetOneFive = players.players[currentPlayerIndex].isBetOneFive
+                            userHandler.isBetOneSix = players.players[currentPlayerIndex].isBetOneSix
+                            userHandler.isBetTwoThree = players.players[currentPlayerIndex].isBetTwoThree
+                            userHandler.isBetTwoFour = players.players[currentPlayerIndex].isBetTwoFour
+                            userHandler.isBetTwoFive = players.players[currentPlayerIndex].isBetTwoFive
+                            userHandler.isBetTwoSix = players.players[currentPlayerIndex].isBetTwoSix
+                            userHandler.isBetThreeFour = players.players[currentPlayerIndex].isBetThreeFour
+                            userHandler.isBetThreeFive = players.players[currentPlayerIndex].isBetThreeFive
+                            userHandler.isBetThreeSix = players.players[currentPlayerIndex].isBetThreeSix
+                            userHandler.isBetFourFive = players.players[currentPlayerIndex].isBetFourSix
+                            userHandler.isBetFourSix = players.players[currentPlayerIndex].isBetFourSix
+                            userHandler.isBetFiveSix = players.players[currentPlayerIndex].isBetFiveSix
+                        }
+                        savePlayers()
+                    }) {
+                        Image(systemName: "square.and.arrow.down.on.square")
+                            .font(.title2)
+                            .foregroundColor(.white)
+                            .padding(.horizontal, 10)
+                            .offset(x: -10)
                     }
-                    .offset(y: 140)
+                    .offset(y: 165)
+                    .offset(x: 175)
+                    
+                    Spacer()
+                    
+                    // MARK: - Backward to MenuView
+                    Button(action: {
+                        // Navigate to ContentView
+                    }) {
+                            NavigationLink(
+                                destination: MainMenuView(currentPlayerIndex: $currentPlayerIndex, selectedLevel: selectedLevel, language: language),
+                                label: {
+                                    Image(systemName: "arrowshape.backward.fill")
+                                        .font(.title2)
+                                        .foregroundColor(.white)
+                                        .padding(.horizontal, 10)
+                                        .offset(x: -10)
+                                }
+
+                            )
+                }
+                .offset(y: 130)
+                .offset(x: -155)
                     // MARK: - SHOW MONEY AND HIGHSCORE
                     HStack{
                         HStack{
-                            Text("Your\nMoney".uppercased())
+                            Text("usermoney-string")
                                 .modifier(ScoreLabelModifiers())
                             Text("\(coins)")
                             .modifier(ScoreNumberModifiers())
                         }
                         .modifier(ScoreCapsuleStyle())
-                        
+                        .frame(width: 140, alignment: .topLeading) // set a fixed width here
                         Spacer()
-                        Button {
-                            showLeaderBoard = true
-                        } label: {
-                            Image(systemName: "trophy.fill")
-                                .resizable()
-                                .scaledToFill()
-                                .frame(width: 31, height: 31, alignment: .center)
-                                .foregroundColor(.yellow)
+                        
+                        Button(action: {
+                            // Navigate to InfoView
+                        }) {
+                                NavigationLink(
+                                    destination: LeaderViewBoard( language: $language),
+                                    label: {
+                                        ZStack{
+                                            Image(systemName: "trophy.fill")
+                                                .resizable()
+                                                .scaledToFill()
+                                                .frame(width: 31, height: 31, alignment: .center)
+                                                .foregroundColor(.yellow)
+                                        }
+                                    }
+
+                                )
                         }
 
                         Spacer()
                         
                         HStack{
-                            Text("High\nScore".uppercased())
+                            Text("Highscore-string")
                                 .modifier(ScoreLabelModifiers())
                             Text("\(highscore)")
                             .modifier(ScoreNumberModifiers())
                         }
                         .modifier(ScoreCapsuleStyle())
+                        .frame(width: 140, alignment: .topLeading) // set the same fixed width here
                     }
                     .padding()
-                    .offset(y: 15)
+                    .offset(y: -11.5)
                     
                     Spacer()
                     
@@ -685,9 +853,10 @@ struct ContentView: View {
                             ReelView(reelIcon: icons[reels[1]], AnimatingIcon: animationIcon)
                             ReelView(reelIcon: icons[reels[2]], AnimatingIcon: animationIcon)
                         }
-                        
-                        SicboTableView(userHandler: userHandler)
-                        
+                        .offset(y: -30)
+                        Spacer()
+                        SicboTableView(players: players, userHandler: userHandler, language: $language, currentPlayerIndex: $currentPlayerIndex)
+                            .offset(y: -30)
                         Spacer()
                         
                         HStack {
@@ -720,11 +889,19 @@ struct ContentView: View {
                                 CheckWinning()
                                 print(coins)
                                 print(sum3Reel)
+//                                WinPercentage()S
+                                print(FirstWin)
+                                win_percentage = (Float(Win) / Float(Win + Lose)) * 100
                                 adjustGameLogicForLevel()
                                 isGameOver()
                                 if currentPlayerIndex >= 0 && currentPlayerIndex < players.players.count {
+                                    getWinningStreak()
+                                    CheckFirstWin()
+                                    getHighScoreBadge()
                                     players.players[currentPlayerIndex].UserMoney = coins
                                     players.players[currentPlayerIndex].HighScore = highscore
+                                    players.players[currentPlayerIndex].BattleNum = Battle_Num
+                                    players.players[currentPlayerIndex].WinPercentage = win_percentage
                                 }
                                 savePlayers()
                             } label: {
@@ -732,6 +909,7 @@ struct ContentView: View {
                                     .resizable()
                                     .frame(width: 80, height: 80)
                                     .modifier(ReelImageModifier())
+                                    .offset(y: -5)
                             }
                             
                             Spacer()
@@ -750,7 +928,7 @@ struct ContentView: View {
                             }
                         }
                         .padding()
-                        .offset(y: -40)
+                        .offset(y: -70)
                     }
                 }
                 //VStack
@@ -778,7 +956,7 @@ struct ContentView: View {
                                     .multilineTextAlignment(.center)
                                 Button {
                                     showGameOverMessage = false
-                                    coins = 100
+                                    coins = 300
                                 } label: {
                                     Text("New Game".uppercased())
                                         .padding(.vertical, 10)
@@ -797,17 +975,51 @@ struct ContentView: View {
                     .cornerRadius(20)
                 }
                 } //ZStack
+                .navigationBarBackButtonHidden(true)
                 .sheet(isPresented: $showLeaderBoard){
-                    LeaderViewBoard()
+                    LeaderViewBoard(language: $language)
             }
-            .onAppear{
-                playSound(sound: "drum-music", type: "mp3")
-                loadPlayers()
-                if currentPlayerIndex != -1 {
-                    coins = players.players[currentPlayerIndex].UserMoney
-                    highscore = players.players[currentPlayerIndex].HighScore
-                }
-        }
+                .environment(\.locale, Locale.init(identifier: language))
+                .onAppear(perform: {
+                    playSound(sound: "space-line", type: "mp3")
+                    loadPlayers()
+                    if currentPlayerIndex != -1 {
+                        coins = players.players[currentPlayerIndex].UserMoney
+                        highscore = players.players[currentPlayerIndex].HighScore
+                        userHandler.isBetAnyTriple = players.players[currentPlayerIndex].isBetAnyTriple
+                        userHandler.isBetOdd = players.players[currentPlayerIndex].isBetOdd
+                        userHandler.isBetEven = players.players[currentPlayerIndex].isBetEven
+                        userHandler.isBetSmall = players.players[currentPlayerIndex].isBetSmall
+                        userHandler.isBetBig = players.players[currentPlayerIndex].isBetBig
+                        userHandler.isBetOne = players.players[currentPlayerIndex].isBetOne
+                        userHandler.isBetTwo = players.players[currentPlayerIndex].isBetTwo
+                        userHandler.isBetThree = players.players[currentPlayerIndex].isBetThree
+                        userHandler.isBetFour = players.players[currentPlayerIndex].isBetFour
+                        userHandler.isBetFive = players.players[currentPlayerIndex].isBetFive
+                        userHandler.isBetSix = players.players[currentPlayerIndex].isBetSix
+                        userHandler.isBetDoubleOne = players.players[currentPlayerIndex].isBetDoubleOne
+                        userHandler.isBetDoubleTwo = players.players[currentPlayerIndex].isBetDoubleTwo
+                        userHandler.isBetDoubleThree = players.players[currentPlayerIndex].isBetDoubleThree
+                        userHandler.isBetDoubleFour = players.players[currentPlayerIndex].isBetDoubleFour
+                        userHandler.isBetDoubleFive = players.players[currentPlayerIndex].isBetDoubleFive
+                        userHandler.isBetDoubleSix = players.players[currentPlayerIndex].isBetDoubleSix
+                        userHandler.isBetOneTwo = players.players[currentPlayerIndex].isBetOneTwo
+                        userHandler.isBetOneThree = players.players[currentPlayerIndex].isBetOneThree
+                        userHandler.isBetOneFour = players.players[currentPlayerIndex].isBetOneFour
+                        userHandler.isBetOneFive = players.players[currentPlayerIndex].isBetOneFive
+                        userHandler.isBetOneSix = players.players[currentPlayerIndex].isBetOneSix
+                        userHandler.isBetTwoThree = players.players[currentPlayerIndex].isBetTwoThree
+                        userHandler.isBetTwoFour = players.players[currentPlayerIndex].isBetTwoFour
+                        userHandler.isBetTwoFive = players.players[currentPlayerIndex].isBetTwoFive
+                        userHandler.isBetTwoSix = players.players[currentPlayerIndex].isBetTwoSix
+                        userHandler.isBetThreeFour = players.players[currentPlayerIndex].isBetThreeFour
+                        userHandler.isBetThreeFive = players.players[currentPlayerIndex].isBetThreeFive
+                        userHandler.isBetThreeSix = players.players[currentPlayerIndex].isBetThreeSix
+                        userHandler.isBetFourFive = players.players[currentPlayerIndex].isBetFourSix
+                        userHandler.isBetFourSix = players.players[currentPlayerIndex].isBetFourSix
+                        userHandler.isBetFiveSix = players.players[currentPlayerIndex].isBetFiveSix
+                    }
+                })
         }
     }
     
@@ -836,4 +1048,3 @@ struct ContentView_Previews: PreviewProvider {
         ContentView(currentPlayerIndex: .constant(-1))
     }
 }
-

@@ -27,7 +27,7 @@ struct ScoreLabelModifiers: ViewModifier {
     func body(content: Content) -> some View {
         content
             .foregroundColor(.white)
-            .font(.system(size: 10, weight: .bold, design: .rounded))
+            .font(.system(size: 12, weight: .bold, design: .rounded))
     }
 }
 
@@ -35,7 +35,7 @@ struct ScoreNumberModifiers: ViewModifier {
     func body(content: Content) -> some View {
         content
             .foregroundColor(.white)
-            .font(.system(size: 20, weight: .heavy, design: .rounded))
+            .font(.system(size: 15, weight: .heavy, design: .rounded))
     }
 }
 

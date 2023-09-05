@@ -9,7 +9,7 @@ import SwiftUI
 
 struct LogoView: View {
     var body: some View {
-        Image("rmit-casino-welcome-logo")
+        Image("taixiulogo")
             .resizable()
             .scaledToFit()
             .frame(height: 200)
